@@ -1,0 +1,319 @@
+[
+  {
+    "ContainingType": "server.contollers.Winform.DashBoard.DashBoardController",
+    "Method": "GetInfoStaff",
+    "RelativePath": "api/DashBoard/GetInfoStaff/idUser",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idUser",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.Winform.DashBoard.DashBoardController",
+    "Method": "GetThongTinDashBoard",
+    "RelativePath": "api/DashBoard/GetThongTinDashBoard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.Payment.PaymentMoMoController",
+    "Method": "CreatePayment",
+    "RelativePath": "api/PaymentMoMo/CreatePayment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "server.Models.Payment.MoMoRequestModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.Payment.PaymentMoMoController",
+    "Method": "Notify",
+    "RelativePath": "api/PaymentMoMo/Notify",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "response",
+        "Type": "System.Object",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.Payment.PaymentVNPayController",
+    "Method": "CreatePayment",
+    "RelativePath": "api/PaymentVNPay/CreatePayment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "server.Models.Payment.VNPayRequestModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.Payment.PaymentVNPayController",
+    "Method": "ReceiveVNPay",
+    "RelativePath": "api/PaymentVNPay/ReceiveVNPay",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "query",
+        "Type": "System.Collections.Generic.Dictionary\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.TrangChu.TrangChuController",
+    "Method": "GetAllKhoaHocOfLoaiKhoaHoc",
+    "RelativePath": "api/TrangChu/GetAllKhoaHocOfLoaiKhoaHoc/{idChuyenMon}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idChuyenMon",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.TrangChu.TrangChuController",
+    "Method": "GetAllLoaiKhoaHoc",
+    "RelativePath": "api/TrangChu/GetAllLoaiKhoaHoc",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.TrangChu.TrangChuController",
+    "Method": "GetAllTeacher",
+    "RelativePath": "api/TrangChu/GetAllTeacher",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.TrangChu.TrangChuController",
+    "Method": "GetDetailKhoaHoc",
+    "RelativePath": "api/TrangChu/GetDetailKhoaHoc/{idKhoaHoc}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idKhoaHoc",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.TrangChu.TrangChuController",
+    "Method": "GetDetailLoaiKhoaHoc",
+    "RelativePath": "api/TrangChu/GetDetailLoaiKhoaHoc/{idChuyenMon}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idChuyenMon",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.TrangChu.TrangChuController",
+    "Method": "GetThongTinUser",
+    "RelativePath": "api/TrangChu/GetThongTinUser/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.XacThuc.XacThucController",
+    "Method": "DangKy",
+    "RelativePath": "api/XacThuc/DangKy",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDto",
+        "Type": "server.contollers.XacThuc.DangKyDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.XacThuc.XacThucController",
+    "Method": "DangNhap",
+    "RelativePath": "api/XacThuc/DangNhap",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDto",
+        "Type": "server.contollers.XacThuc.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.XacThuc.XacThucController",
+    "Method": "DoiMatKhau",
+    "RelativePath": "api/XacThuc/DoiMatKhau/{UserId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "MatKhauMoi",
+        "Type": "server.contollers.XacThuc.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.XacThuc.XacThucController",
+    "Method": "googleLogin",
+    "RelativePath": "api/XacThuc/GoogleLogin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "googleLoginDto",
+        "Type": "server.contollers.XacThuc.Google_loginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.XacThuc.XacThucController",
+    "Method": "Logout",
+    "RelativePath": "api/XacThuc/Logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.XacThuc.XacThucController",
+    "Method": "QuenMatKhau",
+    "RelativePath": "api/XacThuc/QuenMatKhau",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mailUser",
+        "Type": "server.contollers.XacThuc.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.XacThuc.XacThucController",
+    "Method": "RefeshToken",
+    "RelativePath": "api/XacThuc/RefreshToken",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "refreshTokenDto",
+        "Type": "server.contollers.XacThuc.refreshTokenDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.XacThuc.XacThucController",
+    "Method": "SendOTP",
+    "RelativePath": "api/XacThuc/SendOTP",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDto",
+        "Type": "server.contollers.XacThuc.DangKyDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "server.contollers.XacThuc.XacThucController",
+    "Method": "XacNhanOTP",
+    "RelativePath": "api/XacThuc/XacNhanOTP",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "xacNhanOTPDto",
+        "Type": "server.contollers.XacThuc.XacNhanOTPDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
