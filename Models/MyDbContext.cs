@@ -27,6 +27,8 @@ public partial class MyDbContext : DbContext
 
     public virtual DbSet<GiaoVien> GiaoViens { get; set; }
 
+    public virtual DbSet<GiaoVienDdayLop> GiaoVienDdayLops { get; set; }
+
     public virtual DbSet<HoaDonHocCu> HoaDonHocCus { get; set; }
 
     public virtual DbSet<HoaDonKhoaHoc> HoaDonKhoaHocs { get; set; }
@@ -71,45 +73,55 @@ public partial class MyDbContext : DbContext
     {
         modelBuilder.Entity<CacHocCuKhuyenMai>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__cacHocCu__3213E83F7C55E569");
+            entity.HasKey(e => e.Id).HasName("PK__cacHocCu__3213E83FAA1D9912");
 
             entity.ToTable("cacHocCuKhuyenMai");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.IdHocCu).HasColumnName("idHocCu");
             entity.Property(e => e.IdKhuyenMai).HasColumnName("idKhuyenMai");
+            entity.Property(e => e.NgayBatDau)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnName("ngayBatDau");
+            entity.Property(e => e.NgayKetThuc).HasColumnName("ngayKetThuc");
+            entity.Property(e => e.SoLuong).HasColumnName("soLuong");
 
             entity.HasOne(d => d.IdHocCuNavigation).WithMany(p => p.CacHocCuKhuyenMais)
                 .HasForeignKey(d => d.IdHocCu)
-                .HasConstraintName("FK__cacHocCuK__idHoc__04E4BC85");
+                .HasConstraintName("FK__cacHocCuK__idHoc__08B54D69");
 
             entity.HasOne(d => d.IdKhuyenMaiNavigation).WithMany(p => p.CacHocCuKhuyenMais)
                 .HasForeignKey(d => d.IdKhuyenMai)
-                .HasConstraintName("FK__cacHocCuK__idKhu__05D8E0BE");
+                .HasConstraintName("FK__cacHocCuK__idKhu__09A971A2");
         });
 
         modelBuilder.Entity<CacKhoaHocKhuyenMai>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__cacKhoaH__3213E83F92E9A9B3");
+            entity.HasKey(e => e.Id).HasName("PK__cacKhoaH__3213E83FB9F55C10");
 
             entity.ToTable("cacKhoaHocKhuyenMai");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.IdKhoaHoc).HasColumnName("idKhoaHoc");
             entity.Property(e => e.IdKhuyenMai).HasColumnName("idKhuyenMai");
+            entity.Property(e => e.NgayBatDau)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnName("ngayBatDau");
+            entity.Property(e => e.NgayKetThuc).HasColumnName("ngayKetThuc");
+            entity.Property(e => e.SoLuong).HasColumnName("soLuong");
 
             entity.HasOne(d => d.IdKhoaHocNavigation).WithMany(p => p.CacKhoaHocKhuyenMais)
                 .HasForeignKey(d => d.IdKhoaHoc)
-                .HasConstraintName("FK__cacKhoaHo__idKho__02084FDA");
+                .HasConstraintName("FK__cacKhoaHo__idKho__04E4BC85");
 
             entity.HasOne(d => d.IdKhuyenMaiNavigation).WithMany(p => p.CacKhoaHocKhuyenMais)
                 .HasForeignKey(d => d.IdKhuyenMai)
-                .HasConstraintName("FK__cacKhoaHo__idKhu__01142BA1");
+                .HasConstraintName("FK__cacKhoaHo__idKhu__03F0984C");
         });
 
         modelBuilder.Entity<ChiTietHoaDonHocCu>(entity =>
         {
-            entity.HasKey(e => new { e.IdHoaDonHocCu, e.IdHocCu }).HasName("PK__chiTietH__3A55BF5B0ABFC88B");
+            entity.HasKey(e => new { e.IdHoaDonHocCu, e.IdHocCu }).HasName("PK__chiTietH__3A55BF5B819242F1");
 
             entity.ToTable("chiTietHoaDonHocCu");
 
@@ -120,17 +132,17 @@ public partial class MyDbContext : DbContext
             entity.HasOne(d => d.IdHoaDonHocCuNavigation).WithMany(p => p.ChiTietHoaDonHocCus)
                 .HasForeignKey(d => d.IdHoaDonHocCu)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__chiTietHo__idHoa__7A672E12");
+                .HasConstraintName("FK__chiTietHo__idHoa__7D439ABD");
 
             entity.HasOne(d => d.IdHocCuNavigation).WithMany(p => p.ChiTietHoaDonHocCus)
                 .HasForeignKey(d => d.IdHocCu)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__chiTietHo__idHoc__7B5B524B");
+                .HasConstraintName("FK__chiTietHo__idHoc__7E37BEF6");
         });
 
         modelBuilder.Entity<ChiTietPhieuNhap>(entity =>
         {
-            entity.HasKey(e => new { e.IdPhieuNhapHang, e.IdHocCu }).HasName("PK__chiTietP__A820FB6ACCFA949B");
+            entity.HasKey(e => new { e.IdPhieuNhapHang, e.IdHocCu }).HasName("PK__chiTietP__A820FB6A0FECFC67");
 
             entity.ToTable("chiTietPhieuNhap");
 
@@ -142,17 +154,17 @@ public partial class MyDbContext : DbContext
             entity.HasOne(d => d.IdHocCuNavigation).WithMany(p => p.ChiTietPhieuNhaps)
                 .HasForeignKey(d => d.IdHocCu)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__chiTietPh__idHoc__6EF57B66");
+                .HasConstraintName("FK__chiTietPh__idHoc__71D1E811");
 
             entity.HasOne(d => d.IdPhieuNhapHangNavigation).WithMany(p => p.ChiTietPhieuNhaps)
                 .HasForeignKey(d => d.IdPhieuNhapHang)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__chiTietPh__idPhi__6FE99F9F");
+                .HasConstraintName("FK__chiTietPh__idPhi__72C60C4A");
         });
 
         modelBuilder.Entity<ChuyenMon>(entity =>
         {
-            entity.HasKey(e => e.IdChuyenMon).HasName("PK__chuyenMo__EF3A9E97A70D7BEA");
+            entity.HasKey(e => e.IdChuyenMon).HasName("PK__chuyenMo__EF3A9E9770B6D407");
 
             entity.ToTable("chuyenMon");
 
@@ -168,7 +180,7 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<GiaoVien>(entity =>
         {
-            entity.HasKey(e => e.GiaoVienId).HasName("PK__giaoVien__3E3E99ABA8A0318F");
+            entity.HasKey(e => e.GiaoVienId).HasName("PK__giaoVien__3E3E99AB6E22F647");
 
             entity.ToTable("giaoVien");
 
@@ -191,9 +203,28 @@ public partial class MyDbContext : DbContext
                 .HasColumnName("trangThai");
         });
 
+        modelBuilder.Entity<GiaoVienDdayLop>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__giaoVien__3213E83F3DF05A01");
+
+            entity.ToTable("giaoVienDdayLop");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.IdGiaoVien).HasColumnName("idGiaoVien");
+            entity.Property(e => e.IdLopHoc).HasColumnName("idLopHoc");
+
+            entity.HasOne(d => d.IdGiaoVienNavigation).WithMany(p => p.GiaoVienDdayLops)
+                .HasForeignKey(d => d.IdGiaoVien)
+                .HasConstraintName("FK__giaoVienD__idGia__59FA5E80");
+
+            entity.HasOne(d => d.IdLopHocNavigation).WithMany(p => p.GiaoVienDdayLops)
+                .HasForeignKey(d => d.IdLopHoc)
+                .HasConstraintName("FK__giaoVienD__idLop__59063A47");
+        });
+
         modelBuilder.Entity<HoaDonHocCu>(entity =>
         {
-            entity.HasKey(e => e.IdHoaDonHocCu).HasName("PK__hoaDonHo__0E95D3FF7CCF687F");
+            entity.HasKey(e => e.IdHoaDonHocCu).HasName("PK__hoaDonHo__0E95D3FF8717A6D2");
 
             entity.ToTable("hoaDonHocCu");
 
@@ -213,16 +244,16 @@ public partial class MyDbContext : DbContext
 
             entity.HasOne(d => d.IdKhachHangNavigation).WithMany(p => p.HoaDonHocCus)
                 .HasForeignKey(d => d.IdKhachHang)
-                .HasConstraintName("FK__hoaDonHoc__idKha__778AC167");
+                .HasConstraintName("FK__hoaDonHoc__idKha__7A672E12");
 
             entity.HasOne(d => d.IdNhanVienNavigation).WithMany(p => p.HoaDonHocCus)
                 .HasForeignKey(d => d.IdNhanVien)
-                .HasConstraintName("FK__hoaDonHoc__idNha__76969D2E");
+                .HasConstraintName("FK__hoaDonHoc__idNha__797309D9");
         });
 
         modelBuilder.Entity<HoaDonKhoaHoc>(entity =>
         {
-            entity.HasKey(e => e.IdHoaDon).HasName("PK__hoaDonKh__B060C52C38485156");
+            entity.HasKey(e => e.IdHoaDon).HasName("PK__hoaDonKh__B060C52CF96BEFF3");
 
             entity.ToTable("hoaDonKhoaHoc");
 
@@ -241,20 +272,20 @@ public partial class MyDbContext : DbContext
 
             entity.HasOne(d => d.HocVien).WithMany(p => p.HoaDonKhoaHocs)
                 .HasForeignKey(d => d.HocVienId)
-                .HasConstraintName("FK__hoaDonKho__hocVi__0B91BA14");
+                .HasConstraintName("FK__hoaDonKho__hocVi__0F624AF8");
 
             entity.HasOne(d => d.IdKhoaHocNavigation).WithMany(p => p.HoaDonKhoaHocs)
                 .HasForeignKey(d => d.IdKhoaHoc)
-                .HasConstraintName("FK__hoaDonKho__idKho__0A9D95DB");
+                .HasConstraintName("FK__hoaDonKho__idKho__0E6E26BF");
 
             entity.HasOne(d => d.IdLopHocNavigation).WithMany(p => p.HoaDonKhoaHocs)
                 .HasForeignKey(d => d.IdLopHoc)
-                .HasConstraintName("FK__hoaDonKho__idLop__09A971A2");
+                .HasConstraintName("FK__hoaDonKho__idLop__0D7A0286");
         });
 
         modelBuilder.Entity<HocCu>(entity =>
         {
-            entity.HasKey(e => e.IdHocCu).HasName("PK__hocCu__4C06CA42A01743FF");
+            entity.HasKey(e => e.IdHocCu).HasName("PK__hocCu__4C06CA424E77405B");
 
             entity.ToTable("hocCu");
 
@@ -271,12 +302,12 @@ public partial class MyDbContext : DbContext
 
             entity.HasOne(d => d.IdLoaiHocCuNavigation).WithMany(p => p.HocCus)
                 .HasForeignKey(d => d.IdLoaiHocCu)
-                .HasConstraintName("FK__hocCu__idLoaiHoc__656C112C");
+                .HasConstraintName("FK__hocCu__idLoaiHoc__68487DD7");
         });
 
         modelBuilder.Entity<HocCuThuocLop>(entity =>
         {
-            entity.HasKey(e => new { e.IdHocCu, e.IdLopHoc }).HasName("PK__hocCuThu__F7B523779DDBA95C");
+            entity.HasKey(e => new { e.IdHocCu, e.IdLopHoc }).HasName("PK__hocCuThu__F7B5237784DBDF4A");
 
             entity.ToTable("hocCuThuocLop");
 
@@ -287,17 +318,17 @@ public partial class MyDbContext : DbContext
             entity.HasOne(d => d.IdHocCuNavigation).WithMany(p => p.HocCuThuocLops)
                 .HasForeignKey(d => d.IdHocCu)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__hocCuThuo__idHoc__72C60C4A");
+                .HasConstraintName("FK__hocCuThuo__idHoc__75A278F5");
 
             entity.HasOne(d => d.IdLopHocNavigation).WithMany(p => p.HocCuThuocLops)
                 .HasForeignKey(d => d.IdLopHoc)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__hocCuThuo__idLop__73BA3083");
+                .HasConstraintName("FK__hocCuThuo__idLop__76969D2E");
         });
 
         modelBuilder.Entity<HocVien>(entity =>
         {
-            entity.HasKey(e => e.IdHocVien).HasName("PK__HocVien__4B013DD5216B54F2");
+            entity.HasKey(e => e.IdHocVien).HasName("PK__HocVien__4B013DD5FA4867F5");
 
             entity.ToTable("HocVien");
 
@@ -324,7 +355,7 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<KhoaHoc>(entity =>
         {
-            entity.HasKey(e => e.IdKhoaHoc).HasName("PK__khoaHoc__BD521AA8E20B17CB");
+            entity.HasKey(e => e.IdKhoaHoc).HasName("PK__khoaHoc__BD521AA84E70AB05");
 
             entity.ToTable("khoaHoc");
 
@@ -351,15 +382,11 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<KhuyenMai>(entity =>
         {
-            entity.HasKey(e => e.IdKhuyenMai).HasName("PK__khuyenMa__637EEC7C8FDE5D54");
+            entity.HasKey(e => e.IdKhuyenMai).HasName("PK__khuyenMa__637EEC7C26081A22");
 
             entity.ToTable("khuyenMai");
 
             entity.Property(e => e.IdKhuyenMai).HasColumnName("idKhuyenMai");
-            entity.Property(e => e.NgayBatDau)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnName("ngayBatDau");
-            entity.Property(e => e.NgayKetThuc).HasColumnName("ngayKetThuc");
             entity.Property(e => e.PhanTramKhuyenMai).HasColumnName("phanTramKhuyenMai");
             entity.Property(e => e.TenKhuyenMai)
                 .HasMaxLength(200)
@@ -368,7 +395,7 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<LichHoc>(entity =>
         {
-            entity.HasKey(e => e.IdLichHoc).HasName("PK__lichHoc__C82DCAB357EA473D");
+            entity.HasKey(e => e.IdLichHoc).HasName("PK__lichHoc__C82DCAB304C2EF4D");
 
             entity.ToTable("lichHoc");
 
@@ -384,16 +411,16 @@ public partial class MyDbContext : DbContext
 
             entity.HasOne(d => d.IdLopHocNavigation).WithMany(p => p.LichHocs)
                 .HasForeignKey(d => d.IdLopHoc)
-                .HasConstraintName("FK__lichHoc__idLopHo__60A75C0F");
+                .HasConstraintName("FK__lichHoc__idLopHo__6383C8BA");
 
             entity.HasOne(d => d.IdPhongNavigation).WithMany(p => p.LichHocs)
                 .HasForeignKey(d => d.IdPhong)
-                .HasConstraintName("FK__lichHoc__idPhong__5FB337D6");
+                .HasConstraintName("FK__lichHoc__idPhong__628FA481");
         });
 
         modelBuilder.Entity<LoaiHocCu>(entity =>
         {
-            entity.HasKey(e => e.IdLoaiHocCu).HasName("PK__loaiHocC__006732AB1E7D5E06");
+            entity.HasKey(e => e.IdLoaiHocCu).HasName("PK__loaiHocC__006732AB9A045417");
 
             entity.ToTable("loaiHocCu");
 
@@ -405,12 +432,11 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<LopHoc>(entity =>
         {
-            entity.HasKey(e => e.IdLopHoc).HasName("PK__lopHoc__BB3E935A948A4EF8");
+            entity.HasKey(e => e.IdLopHoc).HasName("PK__lopHoc__BB3E935A4D562DBD");
 
             entity.ToTable("lopHoc", tb => tb.HasTrigger("taoLichHoc"));
 
             entity.Property(e => e.IdLopHoc).HasColumnName("idLopHoc");
-            entity.Property(e => e.GiaoVienId).HasColumnName("giaoVienID");
             entity.Property(e => e.IdKhoaHoc).HasColumnName("idKhoaHoc");
             entity.Property(e => e.IdPhong).HasColumnName("idPhong");
             entity.Property(e => e.NgayKhaiGiang).HasColumnName("ngayKhaiGiang");
@@ -432,10 +458,6 @@ public partial class MyDbContext : DbContext
                 .HasMaxLength(30)
                 .HasColumnName("trangThai");
 
-            entity.HasOne(d => d.GiaoVien).WithMany(p => p.LopHocs)
-                .HasForeignKey(d => d.GiaoVienId)
-                .HasConstraintName("FK__lopHoc__giaoVien__571DF1D5");
-
             entity.HasOne(d => d.IdKhoaHocNavigation).WithMany(p => p.LopHocs)
                 .HasForeignKey(d => d.IdKhoaHoc)
                 .HasConstraintName("FK__lopHoc__idKhoaHo__5535A963");
@@ -447,7 +469,7 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<NhaCungCap>(entity =>
         {
-            entity.HasKey(e => e.IdNhaCungCap).HasName("PK__nhaCungC__178CA80780B5D0D1");
+            entity.HasKey(e => e.IdNhaCungCap).HasName("PK__nhaCungC__178CA8071269E2BB");
 
             entity.ToTable("nhaCungCap");
 
@@ -463,7 +485,7 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<NhanVien>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__NhanVien__CB9A1CDF835B5BD4");
+            entity.HasKey(e => e.UserId).HasName("PK__NhanVien__CB9A1CDF3AA55E62");
 
             entity.ToTable("NhanVien");
 
@@ -491,7 +513,7 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<PhanHoi>(entity =>
         {
-            entity.HasKey(e => e.IdPhanHoi).HasName("PK__phanHoi__9D16DD9549ABC67F");
+            entity.HasKey(e => e.IdPhanHoi).HasName("PK__phanHoi__9D16DD951A21AEE3");
 
             entity.ToTable("phanHoi");
 
@@ -506,16 +528,16 @@ public partial class MyDbContext : DbContext
 
             entity.HasOne(d => d.IdHocVienNavigation).WithMany(p => p.PhanHois)
                 .HasForeignKey(d => d.IdHocVien)
-                .HasConstraintName("FK__phanHoi__idHocVi__5AEE82B9");
+                .HasConstraintName("FK__phanHoi__idHocVi__5DCAEF64");
 
             entity.HasOne(d => d.IdLopHocNavigation).WithMany(p => p.PhanHois)
                 .HasForeignKey(d => d.IdLopHoc)
-                .HasConstraintName("FK__phanHoi__idLopHo__5BE2A6F2");
+                .HasConstraintName("FK__phanHoi__idLopHo__5EBF139D");
         });
 
         modelBuilder.Entity<PhieuNhapHang>(entity =>
         {
-            entity.HasKey(e => e.IdPhieuNhapHang).HasName("PK__phieuNha__9CE097CE31B4A385");
+            entity.HasKey(e => e.IdPhieuNhapHang).HasName("PK__phieuNha__9CE097CE452E07E3");
 
             entity.ToTable("phieuNhapHang");
 
@@ -529,16 +551,16 @@ public partial class MyDbContext : DbContext
 
             entity.HasOne(d => d.IdNhaCungCapNavigation).WithMany(p => p.PhieuNhapHangs)
                 .HasForeignKey(d => d.IdNhaCungCap)
-                .HasConstraintName("FK__phieuNhap__idNha__6C190EBB");
+                .HasConstraintName("FK__phieuNhap__idNha__6EF57B66");
 
             entity.HasOne(d => d.User).WithMany(p => p.PhieuNhapHangs)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__phieuNhap__userI__6B24EA82");
+                .HasConstraintName("FK__phieuNhap__userI__6E01572D");
         });
 
         modelBuilder.Entity<PhongHoc>(entity =>
         {
-            entity.HasKey(e => e.IdPhong).HasName("PK__phongHoc__E540EED44033F3D3");
+            entity.HasKey(e => e.IdPhong).HasName("PK__phongHoc__E540EED4F3AC170B");
 
             entity.ToTable("phongHoc");
 
@@ -550,7 +572,7 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<PhuHuynh>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__PhuHuynh__CB9A1CDFE80911C1");
+            entity.HasKey(e => e.UserId).HasName("PK__PhuHuynh__CB9A1CDFEE41009B");
 
             entity.ToTable("PhuHuynh");
 
@@ -581,7 +603,7 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<Quyen>(entity =>
         {
-            entity.HasKey(e => e.IdQuyen).HasName("PK__quyen__2EA0D084FF8B5C2E");
+            entity.HasKey(e => e.IdQuyen).HasName("PK__quyen__2EA0D0844CC3F912");
 
             entity.ToTable("quyen");
 
@@ -593,7 +615,7 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__CB9A1CDF7B544679");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__CB9A1CDF21BFBC92");
 
             entity.Property(e => e.UserId).HasColumnName("userID");
             entity.Property(e => e.IsHocVien).HasColumnName("isHocVien");

@@ -74,12 +74,15 @@ namespace server
         {
             List<GiaoVien> giaoViens = new List<GiaoVien>();
             var giaoVienAll = await db.GiaoViens
-                .Include(gv => gv.LopHocs)
+                .Include(gv => gv.GiaoVienDdayLops)
+                .ThenInclude(gdl => gdl.IdLopHocNavigation)
                 .Where(gv => gv.TrangThai == true)
                 .ToListAsync();
 
             string[] ngayHocMoi = soBuoiTrenTuan.Split(',');
             var lopHocs = await db.LopHocs
+                .Include(l => l.GiaoVienDdayLops)
+                .ThenInclude(gdl => gdl.IdGiaoVienNavigation)
                 .Include(l => l.LichHocs)
                 .Where(l => l.TrangThai == DungChung.trangThaiLopHoc_DangMo)
                 .ToListAsync();
@@ -91,7 +94,7 @@ namespace server
                 foreach (var lop in lopHocs)
                 {
 
-                    if (lop.GiaoVienId != gv.GiaoVienId)
+                    if (lop.GiaoVienDdayLops.All(g => g.IdGiaoVien != gv.GiaoVienId))
                         continue;
 
                     string[] ngayHocCu = lop.SoBuoiTrenTuan.Split(',');

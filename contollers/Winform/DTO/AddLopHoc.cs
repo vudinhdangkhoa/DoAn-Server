@@ -13,7 +13,7 @@ namespace server.contollers.Winform.DTO
 
         public int? IdPhong { get; set; }
 
-        public int? GiaoVienId { get; set; }
+        public List<int>? GiaoVienId { get; set; }
 
         public DateOnly? NgayKhaiGiang { get; set; }
 

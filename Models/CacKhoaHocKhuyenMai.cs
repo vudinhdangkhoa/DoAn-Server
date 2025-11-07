@@ -11,6 +11,12 @@ public partial class CacKhoaHocKhuyenMai
 
     public int Id { get; set; }
 
+    public DateOnly? NgayBatDau { get; set; }
+
+    public DateOnly? NgayKetThuc { get; set; }
+
+    public int? SoLuong { get; set; }
+
     public virtual KhoaHoc? IdKhoaHocNavigation { get; set; }
 
     public virtual KhuyenMai? IdKhuyenMaiNavigation { get; set; }

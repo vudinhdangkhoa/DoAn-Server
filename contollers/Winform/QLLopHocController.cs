@@ -23,14 +23,14 @@ namespace server.contollers.Winform
         public async Task<IActionResult> GetAllLopHoc()
         {
             // Lấy dữ liệu trước
-            var lopHocs = await db.LopHocs.Select(t => new
+            var lopHocs = await db.LopHocs.Include(t=>t.GiaoVienDdayLops).ThenInclude(g=>g.IdGiaoVienNavigation).Select(t => new
             {
                 t.IdLopHoc,
                 t.IdKhoaHoc,
                 t.TenLopHoc,
                 t.NgayTao,
                 phong = t.IdPhongNavigation.TenPhong,
-                giaoVien = t.GiaoVien.TenGv,
+                giaoVien = t.GiaoVienDdayLops.Select(g=>g.IdGiaoVienNavigation.TenGv).ToList(),
                 t.SoLuongBuoi,
                 t.SoBuoiTrenTuan,
                 t.SoLuongHv,
@@ -80,6 +80,7 @@ namespace server.contollers.Winform
                 .Where(l => l.IdLopHoc == idLophoc)
                 .Include(t => t.IdPhongNavigation)
                 .Include(t => t.HocCuThuocLops)
+                .Include(t=>t.GiaoVienDdayLops).ThenInclude(g=>g.IdGiaoVienNavigation)
                 .Select(t => new
                 {
                     t.IdLopHoc,
@@ -87,7 +88,7 @@ namespace server.contollers.Winform
                     t.TenLopHoc,
                     t.NgayTao,
                     phong = t.IdPhongNavigation.TenPhong,
-                    giaoVien = t.GiaoVien.TenGv,
+                    giaoVien = t.GiaoVienDdayLops.Select(g=>g.IdGiaoVienNavigation.TenGv).ToList(),
                     t.SoLuongBuoi,
                     t.SoBuoiTrenTuan,
                     t.SoLuongHv,
@@ -139,7 +140,7 @@ namespace server.contollers.Winform
                 TenLopHoc = lopHoc.TenLopHoc,
                 IdKhoaHoc = lopHoc.IdKhoaHoc,
                 IdPhong = lopHoc.IdPhong,
-                GiaoVienId = lopHoc.GiaoVienId,
+               
                 NgayKhaiGiang = lopHoc.NgayKhaiGiang,
                 SoLuongBuoi = lopHoc.SoLuongBuoi,
                 SoBuoiTrenTuan = lopHoc.SoBuoiTrenTuan,
@@ -157,6 +158,23 @@ namespace server.contollers.Winform
             }
             db.LopHocs.Add(lh);
             await db.SaveChangesAsync();
+
+            //thêm giáo viên dạy lớp
+            if(lopHoc.GiaoVienId != null)
+            {
+                
+                foreach(var gvId in lopHoc.GiaoVienId)
+                {
+                    GiaoVienDdayLop gvdl = new GiaoVienDdayLop
+                    {
+                        IdGiaoVien = gvId,
+                        IdLopHoc = lh.IdLopHoc
+                    };
+                    db.GiaoVienDdayLops.Add(gvdl);
+                }
+
+            }
+
             // Thêm học cụ vào lớp học
             if (lopHoc.DShocCu != null)
             {
@@ -188,7 +206,7 @@ namespace server.contollers.Winform
 
             existingLopHoc.TenLopHoc = lopHoc.TenLopHoc;
             existingLopHoc.IdPhong = lopHoc.IdPhong;
-            existingLopHoc.GiaoVienId = lopHoc.GiaoVienId;
+            
             existingLopHoc.NgayKhaiGiang = lopHoc.NgayKhaiGiang;
             existingLopHoc.SoLuongBuoi = lopHoc.SoLuongBuoi;
             existingLopHoc.SoBuoiTrenTuan = lopHoc.SoBuoiTrenTuan;
@@ -197,6 +215,23 @@ namespace server.contollers.Winform
             existingLopHoc.SoLuongToiDa = lopHoc.SoLuongToiDa;
             existingLopHoc.ThoiGianBatDau = lopHoc.ThoiGianBatDau;
             existingLopHoc.ThoiGianKetThuc = lopHoc.ThoiGianKetThuc;
+
+            // Cập nhật giáo viên dạy lớp
+            if (lopHoc.GiaoVienId != null)
+            {
+                var existingGiaoVienDdayLops = db.GiaoVienDdayLops.Where(g => g.IdLopHoc == idLopHoc);
+                db.GiaoVienDdayLops.RemoveRange(existingGiaoVienDdayLops);
+
+                foreach (var gvId in lopHoc.GiaoVienId)
+                {
+                    GiaoVienDdayLop gvdl = new GiaoVienDdayLop
+                    {
+                        IdGiaoVien = gvId,
+                        IdLopHoc = idLopHoc
+                    };
+                    db.GiaoVienDdayLops.Add(gvdl);
+                }
+            }
 
             // Cập nhật học cụ
             if (lopHoc.DShocCu != null)

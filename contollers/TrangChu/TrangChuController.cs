@@ -157,7 +157,9 @@ namespace server.contollers.TrangChu
         [HttpGet("GetAllLopHoc/{idKhoaHoc}")]
         public async Task<IActionResult> GetAllLopHoc(int idKhoaHoc)
         {
-            var lopHocs = await db.LopHocs.Where(lh => lh.IdKhoaHoc == idKhoaHoc).Select(lh => new
+            var lopHocs = await db.LopHocs.Where(lh => lh.IdKhoaHoc == idKhoaHoc)
+            .Include(lh=>lh.GiaoVienDdayLops).ThenInclude(gdl=>gdl.IdGiaoVienNavigation)
+            .Select(lh => new
             {
                 id = lh.IdLopHoc,
                 tenLop = lh.TenLopHoc,
@@ -165,7 +167,7 @@ namespace server.contollers.TrangChu
                 soLuongToiDa = lh.SoLuongToiDa,
                 thoiGianBatDau = lh.ThoiGianBatDau,
                 thoiGianKetThuc = lh.ThoiGianKetThuc,
-                giaoVien = lh.GiaoVien.TenGv,
+                giaoVien = lh.GiaoVienDdayLops.Select(gdl => gdl.IdGiaoVienNavigation.TenGv).ToList(),
                 ngayKhaiGiang = lh.NgayKhaiGiang,
                 soBuoiTrenTuan = lh.SoBuoiTrenTuan,
 

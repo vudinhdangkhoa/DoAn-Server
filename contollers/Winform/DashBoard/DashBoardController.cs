@@ -33,7 +33,7 @@ namespace server.contollers.Winform.DashBoard
             var soLuongHocVien = await db.HocViens.CountAsync();
             var soLuongGiaoVien = await db.GiaoViens.CountAsync();
             var doanhThuThang= await db.HoaDonKhoaHocs
-                .Where(hd => hd.Ngaytao.Value.Month == DateTime.Now.Month && hd.Ngaytao.Value.Year == DateTime.Now.Year)
+                .Where(hd => hd.Ngaytao.Value.Month == DateTime.Now.Month && hd.Ngaytao.Value.Year == DateTime.Now.Year&& hd.TrangThai==true)
                 .SumAsync(hd => (decimal?)hd.TongTien) ?? 0;
             return Ok(new
             {
@@ -92,13 +92,15 @@ namespace server.contollers.Winform.DashBoard
         public async Task<IActionResult> GetLopHocItem()
         {
 
-            var ListItem= db.LopHocs.Where(i=>i.NgayKhaiGiang > DateOnly.FromDateTime(DateTime.Now)).Select(t => new
+            var ListItem= db.LopHocs.Where(i=>i.NgayKhaiGiang > DateOnly.FromDateTime(DateTime.Now))
+            .Include(lh=>lh.GiaoVienDdayLops).ThenInclude(gdl=>gdl.IdGiaoVienNavigation)
+            .Select(t => new
             {
                 t.IdLopHoc,
                 t.TenLopHoc,
                 t.SoLuongHv,
                 t.SoLuongToiDa,
-                giaoVien = db.GiaoViens.Where(gv => gv.GiaoVienId == t.GiaoVienId).Select(gv => gv.TenGv).FirstOrDefault(),
+                giaoVien = t.GiaoVienDdayLops.Select(gdl => gdl.IdGiaoVienNavigation.TenGv).ToList(),
                 khoaHoc = db.KhoaHocs.Where(kh => kh.IdKhoaHoc == t.IdKhoaHoc).Select(kh => kh.TenKhoaHoc).FirstOrDefault(),
             }).ToList();
 

@@ -29,7 +29,7 @@ namespace server.contollers.Winform
         public async Task<IActionResult> GetAllHocVien()
         {
             // Lấy dữ liệu trước, không filter với Helper method
-            var hocViens = await db.HocViens.Select(t => new
+            var hocViens = await db.HocViens.Include(t=>t.IdPhuHuynhNavigation).Select(t => new
             {
                 t.TenHv,
                 t.NgaySinh,

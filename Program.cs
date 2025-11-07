@@ -393,9 +393,15 @@ try
         {
             var lopHocs = new List<LopHoc>
             {
-                 new LopHoc{TenLopHoc="Lớp thiếu nhi căn bản thầy Trung",GiaoVienId=1,IdPhong=1,IdKhoaHoc=1,NgayKhaiGiang= DateOnly.FromDateTime(DateTime.Now.AddDays(7)),SoLuongBuoi=36,SoBuoiTrenTuan="1,3,5",NgayTao= DateOnly.FromDateTime(DateTime.Now),SoLuongHv=0,SoLuongToiDa=10,SoLuongToiThieu=5,ThoiGianBatDau=TimeOnly.FromTimeSpan(new TimeSpan(15,0,0)),ThoiGianKetThuc=TimeOnly.FromTimeSpan(new TimeSpan(17,0,0)),TrangThai=DungChung.trangThaiLopHoc_DangMo},
+                 new LopHoc{TenLopHoc="Lớp thiếu nhi căn bản thầy Trung",IdPhong=1,IdKhoaHoc=1,NgayKhaiGiang= DateOnly.FromDateTime(DateTime.Now.AddDays(7)),SoLuongBuoi=36,SoBuoiTrenTuan="1,3,5",NgayTao= DateOnly.FromDateTime(DateTime.Now),SoLuongHv=0,SoLuongToiDa=10,SoLuongToiThieu=5,ThoiGianBatDau=TimeOnly.FromTimeSpan(new TimeSpan(15,0,0)),ThoiGianKetThuc=TimeOnly.FromTimeSpan(new TimeSpan(17,0,0)),TrangThai=DungChung.trangThaiLopHoc_DangMo},
             };
             dbContext.LopHocs.AddRange(lopHocs);
+            var giaoVienDayLop= new GiaoVienDdayLop
+            {
+                IdGiaoVien = dbContext.GiaoViens.FirstOrDefault(gv => gv.TenGv == "Phan Tấn trung").GiaoVienId,
+                IdLopHoc = dbContext.LopHocs.FirstOrDefault(lh => lh.TenLopHoc == "Lớp thiếu nhi căn bản thầy Trung").IdLopHoc
+            };
+            dbContext.GiaoVienDdayLops.Add(giaoVienDayLop);
             dbContext.SaveChanges();
         }
 

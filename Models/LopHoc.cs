@@ -13,8 +13,6 @@ public partial class LopHoc
 
     public int? IdPhong { get; set; }
 
-    public int? GiaoVienId { get; set; }
-
     public DateOnly? NgayKhaiGiang { get; set; }
 
     public DateOnly? NgayTao { get; set; }
@@ -35,7 +33,7 @@ public partial class LopHoc
 
     public int? SoLuongHv { get; set; }
 
-    public virtual GiaoVien? GiaoVien { get; set; }
+    public virtual ICollection<GiaoVienDdayLop> GiaoVienDdayLops { get; set; } = new List<GiaoVienDdayLop>();
 
     public virtual ICollection<HoaDonKhoaHoc> HoaDonKhoaHocs { get; set; } = new List<HoaDonKhoaHoc>();
 
