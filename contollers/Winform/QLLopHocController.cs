@@ -30,7 +30,7 @@ namespace server.contollers.Winform
                 t.TenLopHoc,
                 t.NgayTao,
                 phong = t.IdPhongNavigation.TenPhong,
-                giaoVien = t.GiaoVienDdayLops.Select(g=>g.IdGiaoVienNavigation.TenGv).ToList(),
+                giaoVien = t.GiaoVienDdayLops.Select(g=> new { tenGV = g.IdGiaoVienNavigation.TenGv }).ToList(),
                 t.SoLuongBuoi,
                 t.SoBuoiTrenTuan,
                 t.SoLuongHv,

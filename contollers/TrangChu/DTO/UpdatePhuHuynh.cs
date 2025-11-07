@@ -12,6 +12,7 @@ namespace server.contollers.XacThuc.DTO
         public string? NgaySinh { get; set; }
 
         public string? Sdt { get; set; }
+        public string? GioiTinh { get; set; }
         public IFormFile? avatar { get; set; }
 
     }

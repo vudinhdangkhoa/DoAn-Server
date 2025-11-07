@@ -41,6 +41,7 @@ namespace server.contollers.TrangChu
             {
                 phuHuynh.UserId,
                 phuHuynh.TenPh,
+                phuHuynh.GioiTinh,
                 phuHuynh.NgaySinh,
                 phuHuynh.Sdt,
                 hocVien = phuHuynh.HocViens.Select(hv => new
@@ -48,7 +49,7 @@ namespace server.contollers.TrangChu
                     hv.IdHocVien,
                     hv.TenHv,
                     hv.NgaySinh,
-                    avatar= $"/image/imageHocVien/{hv.Avartar}",
+                    avatar = hv.Avartar.StartsWith("http") ? hv.Avartar : $"/image/imageHocVien/{hv.Avartar}",
 
                 }),
                 avatar = phuHuynh.Avatar.StartsWith("http") ? phuHuynh.Avatar : $"/image/imagePhuhuynh/{phuHuynh.Avatar}"
@@ -82,7 +83,7 @@ namespace server.contollers.TrangChu
                 }
             }
             checkPH.Sdt = updateDto.Sdt ?? checkPH.Sdt;
-
+            checkPH.GioiTinh = updateDto.GioiTinh ?? checkPH.GioiTinh;
             if (updateDto.avatar != null)
             {
 

@@ -40,7 +40,7 @@ namespace server.contollers.Payment
 
             if (request.HocVienId.HasValue)
             {
-                var hocVien = await _context.HocViens.FindAsync(request.HocVienId.Value);
+                var hocVien = await _context.HocViens.FirstOrDefaultAsync(t => t.IdHocVien == request.HocVienId);
                 if (hocVien == null)
                 {
                     PhuHuynh phuHuynh = await _context.PhuHuynhs.FirstOrDefaultAsync(t => t.UserId == request.PhuHuynhId);
@@ -51,7 +51,7 @@ namespace server.contollers.Payment
                         Avartar = phuHuynh.Avatar,
                         NgayTao = DateOnly.FromDateTime(DateTime.Now),
                         IdPhuHuynh = phuHuynh.UserId,
-                        GioiTinh = "Khác",
+                        GioiTinh = phuHuynh.GioiTinh,
 
                     };
                     await _context.HocViens.AddAsync(newHocVien);

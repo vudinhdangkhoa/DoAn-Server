@@ -17,6 +17,8 @@ public partial class PhuHuynh
 
     public string? Avatar { get; set; }
 
+    public string? GioiTinh { get; set; }
+
     public virtual ICollection<HoaDonHocCu> HoaDonHocCus { get; set; } = new List<HoaDonHocCu>();
 
     public virtual ICollection<HocVien> HocViens { get; set; } = new List<HocVien>();

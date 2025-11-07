@@ -210,6 +210,7 @@ namespace server.contollers.XacThuc
                 newUser = new User
                 {
                     Mail = Payload.Email,
+                    
                     MatKhau = null,
                     RefeshToken = null,
                     RefreshTokenExpires = null,
@@ -231,6 +232,7 @@ namespace server.contollers.XacThuc
                 var hocVien = new PhuHuynh
                 {
                     TenPh = Payload.Name,
+                    GioiTinh = null,
                     NgaySinh = null,
                     UserId = newUser.UserId,
                     Sdt = null,

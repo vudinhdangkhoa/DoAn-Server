@@ -109,15 +109,20 @@ namespace server.contollers.TrangChu
         [HttpGet("GetAllKhoaHocOfLoaiKhoaHoc/{idChuyenMon}")]
         public async Task<IActionResult> GetAllKhoaHocOfLoaiKhoaHoc(int idChuyenMon)
         {
-            var khoaHocs = await db.KhoaHocs.Where(kh => kh.IdChuyenMon == idChuyenMon).Select(kh => new
+            var khoaHocs = await db.KhoaHocs.Where(kh => kh.IdChuyenMon == idChuyenMon).Include(kh=>kh.CacKhoaHocKhuyenMais).ThenInclude(ckh=>ckh.IdKhuyenMaiNavigation).Select(kh => new
             {
                 id = kh.IdKhoaHoc,
                 tenKH = kh.TenKhoaHoc,
                 hocPhi = kh.HocPhi,
+                giamGia= kh.CacKhoaHocKhuyenMais
+                            .Where(ckh => ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now) && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)&& ckh.SoLuong!=0 && ckh.IdKhuyenMaiNavigation != null)
+                            .Select(ckh => ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai * kh.HocPhi)
+                            .DefaultIfEmpty(0)
+                            .Max(),
                 thoiGianHoc = kh.SoLuongBuoi,
                 moTa = kh.MoTa,
                 mucTieu = kh.MucTieu,
-                hinhAnh = $"{Request.Scheme}://{Request.Host}/image/imageKhoaHoc/" + kh.HinhAnh,
+                hinhAnh = $"/image/imageKhoaHoc/" + kh.HinhAnh,
             }).ToListAsync();
 
             return Ok(khoaHocs);
@@ -142,7 +147,7 @@ namespace server.contollers.TrangChu
                 khoaHoc.SoLuongBuoi,
                 khoaHoc.MoTa,
                 khoaHoc.MucTieu,
-                hinhAnh = $"{Request.Scheme}://{Request.Host}/image/imageKhoaHoc/" + khoaHoc.HinhAnh,
+                hinhAnh = $"/image/imageKhoaHoc/" + khoaHoc.HinhAnh,
 
                 chuyenMon = new
                 {
@@ -167,7 +172,7 @@ namespace server.contollers.TrangChu
                 soLuongToiDa = lh.SoLuongToiDa,
                 thoiGianBatDau = lh.ThoiGianBatDau,
                 thoiGianKetThuc = lh.ThoiGianKetThuc,
-                giaoVien = lh.GiaoVienDdayLops.Select(gdl => gdl.IdGiaoVienNavigation.TenGv).ToList(),
+                giaoVien = lh.GiaoVienDdayLops.Select(gdl => new { tenGV = gdl.IdGiaoVienNavigation.TenGv }).ToList(),
                 ngayKhaiGiang = lh.NgayKhaiGiang,
                 soBuoiTrenTuan = lh.SoBuoiTrenTuan,
 
