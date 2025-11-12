@@ -31,6 +31,7 @@ namespace server.contollers.Winform
             // Lấy dữ liệu trước, không filter với Helper method
             var hocViens = await db.HocViens.Include(t=>t.IdPhuHuynhNavigation).Select(t => new
             {
+                t.IdHocVien,
                 t.TenHv,
                 t.NgaySinh,
                 phuHuynh = t.IdPhuHuynhNavigation.TenPh,
@@ -56,6 +57,7 @@ namespace server.contollers.Winform
                 t.NgaySinh,
                 t.phuHuynh,
                 t.GioiTinh,
+               
                 hoaDonKhoaHocs = t.hoaDonKhoaHocs.Where(w =>
                     Helper.checkKhoaHocDate(w.lopHoc.NgayKhaiGiang.Value, w.lopHoc.SoBuoiTrenTuan, w.lopHoc.SoLuongBuoi.Value)
                 ).ToList()
