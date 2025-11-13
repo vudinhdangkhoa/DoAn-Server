@@ -29,7 +29,7 @@ namespace server.contollers.Winform
         public async Task<IActionResult> GetAllHocVien()
         {
             // Lấy dữ liệu trước, không filter với Helper method
-            var hocViens = await db.HocViens.Include(t=>t.IdPhuHuynhNavigation).Select(t => new
+            var hocViens = await db.HocViens.Include(t => t.IdPhuHuynhNavigation).Select(t => new
             {
                 t.TenHv,
                 t.NgaySinh,
@@ -64,6 +64,43 @@ namespace server.contollers.Winform
             return Ok(result);
         }
 
+        [HttpGet("GetAllLopHoc")]
+        public async Task<IActionResult> GetAllLopHoc()
+        {
+
+            var result = await db.KhoaHocs.Include(t => t.LopHocs).Select(
+                kh => new
+                {
+                    kh.IdKhoaHoc,
+                    kh.TenKhoaHoc,
+                    kh.HocPhi,
+                    giamGia = (kh.HocPhi * db.CacKhoaHocKhuyenMais
+                    .Include(ckh => ckh.IdKhuyenMaiNavigation)
+                    .Where(ckh => ckh.IdKhoaHoc == kh.IdKhoaHoc
+                        && ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.SoLuong > 0
+                        && ckh.IdKhuyenMaiNavigation != null)
+                    .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
+                    .Max() ?? 0),
+                    LopHocs = kh.LopHocs
+                    .Where(lh=>lh.NgayKhaiGiang > DateOnly.FromDateTime(DateTime.Now) && lh.SoLuongHv < lh.SoLuongToiDa)
+                    .Select(lh => new
+                    {
+                        lh.IdLopHoc,
+                        lh.TenLopHoc,
+                        lh.NgayKhaiGiang,
+                        lh.SoLuongToiDa,
+                        lh.SoLuongHv,
+                        lh.SoBuoiTrenTuan
+                    }).ToList()
+                }
+            ).ToListAsync();
+
+            return Ok();
+
+        }
+
         [HttpPost("AddHocVien")]
         public async Task<IActionResult> AddHocVien([FromBody] AddHocVien hocVien)
         {
@@ -87,7 +124,7 @@ namespace server.contollers.Winform
             };
             db.PhuHuynhs.Add(phuHuynh);
             await db.SaveChangesAsync();
-
+            // Thêm từng học viên
             foreach (var hv in hocVien.DSHocVien)
             {
                 var hocVienEntity = new HocVien
@@ -100,6 +137,40 @@ namespace server.contollers.Winform
                 db.HocViens.Add(hocVienEntity);
             }
             await db.SaveChangesAsync();
+            //thêm từng học viên vào lớp
+            foreach (var hv in hocVien.DSHocVien)
+            {
+                var hocVienEntity = await db.HocViens.FirstOrDefaultAsync(h => h.TenHv == hv.tenHv && h.IdPhuHuynh == phuHuynh.UserId);
+                if (hocVienEntity != null && hv.dsLopId != null)
+                {
+                    foreach (var lopId in hv.dsLopId)
+                    {
+                        var lopHoc = await db.LopHocs.Include(t => t.IdKhoaHocNavigation).FirstOrDefaultAsync(t => t.IdLopHoc == lopId);
+                        if (lopHoc != null)
+                        {
+                            var hoaDon = new HoaDonKhoaHoc
+                            {
+                                HocVienId = hocVienEntity.IdHocVien,
+                                IdLopHoc = lopId,
+                                Ngaytao = DateOnly.FromDateTime(DateTime.Now),
+                                TongTien = lopHoc.IdKhoaHocNavigation.HocPhi,
+                                GiamGia = (lopHoc.IdKhoaHocNavigation.HocPhi * db.CacKhoaHocKhuyenMais
+                                .Include(ckh => ckh.IdKhuyenMaiNavigation)
+                                .Where(ckh => ckh.IdKhoaHoc == lopHoc.IdKhoaHocNavigation.IdKhoaHoc
+                                    && ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now)
+                                    && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)
+                                    && ckh.SoLuong > 0
+                                    && ckh.IdKhuyenMaiNavigation != null)
+                                .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
+                                .Max() ?? 0)
+                            };
+                            db.HoaDonKhoaHocs.Add(hoaDon);
+                        }
+                    }
+                }
+            }
+            await db.SaveChangesAsync();
+
             return Ok(new { message = "Thêm học viên thành công" });
         }
 

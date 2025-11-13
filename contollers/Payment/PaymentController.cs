@@ -34,16 +34,21 @@ namespace server.contollers.Payment
         public async Task<IActionResult> CreatePayment([FromBody] PaymentRequest request)
         {
             // 1. Kiểm tra nghiệp vụ (giữ nguyên như trước)
-            var lopHoc = await _context.LopHocs.FindAsync(request.IdLopHoc);
+            var lopHoc = await _context.LopHocs.Include(t => t.IdKhoaHocNavigation).FirstOrDefaultAsync(t => t.IdLopHoc == request.IdLopHoc);
             if (lopHoc == null) return NotFound(new { message = "Lớp học không tồn tại." });
             if (lopHoc.SoLuongHv >= lopHoc.SoLuongToiDa) return BadRequest(new { message = "Lớp học đã đầy." });
 
-            if (request.HocVienId.HasValue)
+            if (request.HocVienId==0)
             {
-                var hocVien = await _context.HocViens.FirstOrDefaultAsync(t => t.IdHocVien == request.HocVienId);
-                if (hocVien == null)
+
+                PhuHuynh phuHuynh = await _context.PhuHuynhs.FirstOrDefaultAsync(t => t.UserId == request.PhuHuynhId);
+                var checkExist = await _context.HocViens.FirstOrDefaultAsync(hv => hv.TenHv == phuHuynh.TenPh && hv.IdPhuHuynh == phuHuynh.UserId);
+                if (checkExist != null)
                 {
-                    PhuHuynh phuHuynh = await _context.PhuHuynhs.FirstOrDefaultAsync(t => t.UserId == request.PhuHuynhId);
+                    request.HocVienId = checkExist.IdHocVien;
+                }
+                else
+                {
                     var newHocVien = new HocVien
                     {
                         TenHv = phuHuynh.TenPh,
@@ -56,7 +61,10 @@ namespace server.contollers.Payment
                     };
                     await _context.HocViens.AddAsync(newHocVien);
                     await _context.SaveChangesAsync();
+                    request.HocVienId = newHocVien.IdHocVien;
                 }
+               
+                
             }
 
             if (request.HocVienId.HasValue)
@@ -71,8 +79,16 @@ namespace server.contollers.Payment
                 IdLopHoc = request.IdLopHoc,
                 HocVienId = request.HocVienId,
                 IdKhoaHoc = request.KhoaHocId,
-                TongTien = request.Amount,
-                GiamGia = 0,
+                TongTien = lopHoc.IdKhoaHocNavigation.HocPhi,
+                GiamGia = (lopHoc.IdKhoaHocNavigation.HocPhi * _context.CacKhoaHocKhuyenMais
+                                .Include(ckh => ckh.IdKhuyenMaiNavigation)
+                                .Where(ckh => ckh.IdKhoaHoc == lopHoc.IdKhoaHocNavigation.IdKhoaHoc
+                                    && ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now)
+                                    && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)
+                                    && ckh.SoLuong > 0
+                                    && ckh.IdKhuyenMaiNavigation != null)
+                                .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
+                                .Max() ?? 0),
                 Ngaytao = DateOnly.FromDateTime(DateTime.Now),
                 TrangThai = false // Pending
             };

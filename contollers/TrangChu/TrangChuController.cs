@@ -109,16 +109,22 @@ namespace server.contollers.TrangChu
         [HttpGet("GetAllKhoaHocOfLoaiKhoaHoc/{idChuyenMon}")]
         public async Task<IActionResult> GetAllKhoaHocOfLoaiKhoaHoc(int idChuyenMon)
         {
-            var khoaHocs = await db.KhoaHocs.Where(kh => kh.IdChuyenMon == idChuyenMon).Include(kh=>kh.CacKhoaHocKhuyenMais).ThenInclude(ckh=>ckh.IdKhuyenMaiNavigation).Select(kh => new
+            var khoaHocs = await db.KhoaHocs
+            .Where(kh => kh.IdChuyenMon == idChuyenMon)
+            .Select(kh => new
             {
                 id = kh.IdKhoaHoc,
                 tenKH = kh.TenKhoaHoc,
                 hocPhi = kh.HocPhi,
-                giamGia= kh.CacKhoaHocKhuyenMais
-                            .Where(ckh => ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now) && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)&& ckh.SoLuong!=0 && ckh.IdKhuyenMaiNavigation != null)
-                            .Select(ckh => ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai * kh.HocPhi)
-                            .DefaultIfEmpty(0)
-                            .Max(),
+                giamGia = (kh.HocPhi * db.CacKhoaHocKhuyenMais
+                    .Include(ckh => ckh.IdKhuyenMaiNavigation)
+                    .Where(ckh => ckh.IdKhoaHoc == kh.IdKhoaHoc
+                        && ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.SoLuong > 0
+                        && ckh.IdKhuyenMaiNavigation != null)
+                    .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
+                    .Max()?? 0) ,
                 thoiGianHoc = kh.SoLuongBuoi,
                 moTa = kh.MoTa,
                 mucTieu = kh.MucTieu,
@@ -132,7 +138,7 @@ namespace server.contollers.TrangChu
         [HttpGet("GetDetailKhoaHoc/{idKhoaHoc}")]
         public async Task<IActionResult> GetDetailKhoaHoc(int idKhoaHoc)
         {
-            var khoaHoc = await db.KhoaHocs.Include(kh=>kh.IdChuyenMonNavigation).FirstOrDefaultAsync(kh => kh.IdKhoaHoc == idKhoaHoc);
+            var khoaHoc = await db.KhoaHocs.Include(kh => kh.IdChuyenMonNavigation).FirstOrDefaultAsync(kh => kh.IdKhoaHoc == idKhoaHoc);
 
             if (khoaHoc == null)
             {
@@ -144,6 +150,15 @@ namespace server.contollers.TrangChu
                 khoaHoc.IdKhoaHoc,
                 khoaHoc.TenKhoaHoc,
                 khoaHoc.HocPhi,
+                giamGia = (khoaHoc.HocPhi * db.CacKhoaHocKhuyenMais
+                    .Include(ckh => ckh.IdKhuyenMaiNavigation)
+                    .Where(ckh => ckh.IdKhoaHoc == khoaHoc.IdKhoaHoc
+                        && ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.SoLuong > 0
+                        && ckh.IdKhuyenMaiNavigation != null)
+                    .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
+                    .Max() ?? 0),
                 khoaHoc.SoLuongBuoi,
                 khoaHoc.MoTa,
                 khoaHoc.MucTieu,
@@ -163,7 +178,7 @@ namespace server.contollers.TrangChu
         public async Task<IActionResult> GetAllLopHoc(int idKhoaHoc)
         {
             var lopHocs = await db.LopHocs.Where(lh => lh.IdKhoaHoc == idKhoaHoc)
-            .Include(lh=>lh.GiaoVienDdayLops).ThenInclude(gdl=>gdl.IdGiaoVienNavigation)
+            .Include(lh => lh.GiaoVienDdayLops).ThenInclude(gdl => gdl.IdGiaoVienNavigation)
             .Select(lh => new
             {
                 id = lh.IdLopHoc,
@@ -200,7 +215,7 @@ namespace server.contollers.TrangChu
         [HttpPost("DangKyLopHoc")]
         public async Task<IActionResult> DangKyLopHoc([FromBody] DangKyLopHoc dangKyDto)
         {
-            var checkExistHocVien =  await db.HocViens.FindAsync(dangKyDto.HocVienId);
+            var checkExistHocVien = await db.HocViens.FindAsync(dangKyDto.HocVienId);
             if (checkExistHocVien == null)
             {
                 return NotFound(new { message = "Học viên không tồn tại" });
@@ -211,11 +226,11 @@ namespace server.contollers.TrangChu
             {
                 return BadRequest(new { message = "Lịch học bị trùng với lớp học khác" });
             }
-            
-            
+
+
 
             return Ok(new { message = "Đăng ký lớp học thành công" });
         }
-        
+
     }
 }
