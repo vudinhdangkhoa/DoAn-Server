@@ -99,7 +99,7 @@ namespace server.contollers.Winform
                 }
             ).ToListAsync();
 
-            return Ok();
+            return Ok(result);
 
         }
 
