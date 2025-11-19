@@ -70,6 +70,26 @@ namespace server.Services
             var secureHash = HmacSHA512(hashSecret, rawData.ToString());
 
             var paymentUrl = $"{baseUrl}?{queryString}&vnp_SecureHash={secureHash}";
+            
+            // var queryString = new StringBuilder();
+            // var rawData = new StringBuilder();
+
+            // foreach (var kv in sortedParams)
+            // {
+            //     string encodedKey = WebUtility.UrlEncode(kv.Key);
+            //     string encodedValue = WebUtility.UrlEncode(kv.Value).Replace("%20", "+");
+
+            //     queryString.Append($"{encodedKey}={encodedValue}&"); // Dùng cho URL thực tế
+
+            //     // ⚠️ rawData KHÔNG encode
+            //     rawData.Append($"{kv.Key}={kv.Value}&");
+            // }
+
+            // queryString.Length -= 1;
+            // rawData.Length -= 1;
+
+            // var secureHash = HmacSHA512(hashSecret, rawData.ToString());
+            // var paymentUrl = $"{baseUrl}?{queryString}&vnp_SecureHash={secureHash}";
             return paymentUrl;
         }
 

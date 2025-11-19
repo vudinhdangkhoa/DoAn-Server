@@ -15,6 +15,8 @@ public partial class KhoaHoc
 
     public string? MucTieu { get; set; }
 
+    public string? LoTrinh { get; set; }
+
     public double? HocPhi { get; set; }
 
     public int? SoLuongBuoi { get; set; }

@@ -17,6 +17,8 @@ public partial class HocVien
 
     public int? IdPhuHuynh { get; set; }
 
+    public bool? LaPhuHuynh { get; set; }
+
     public string? GioiTinh { get; set; }
 
     public virtual ICollection<HoaDonKhoaHoc> HoaDonKhoaHocs { get; set; } = new List<HoaDonKhoaHoc>();

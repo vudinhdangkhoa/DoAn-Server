@@ -49,7 +49,7 @@ namespace server.Services
         public void SendEmail(string toEmail, string otp)
         {
             string fromEmail = "khoavaden@gmail.com";
-            string fromPassword = "wjyv rrqu devo ngqd";
+            string fromPassword = "rufv cfqw wsay weim";
 
             try
             {

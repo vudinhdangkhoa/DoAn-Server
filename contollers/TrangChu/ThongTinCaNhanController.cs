@@ -44,7 +44,7 @@ namespace server.contollers.TrangChu
                 phuHuynh.GioiTinh,
                 phuHuynh.NgaySinh,
                 phuHuynh.Sdt,
-                hocVien = phuHuynh.HocViens.Select(hv => new
+                hocVien = phuHuynh.HocViens.Where(hv=>hv.LaPhuHuynh==false).Select(hv => new
                 {
                     hv.IdHocVien,
                     hv.TenHv,

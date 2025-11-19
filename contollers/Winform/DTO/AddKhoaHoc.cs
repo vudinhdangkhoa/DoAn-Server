@@ -9,9 +9,8 @@ namespace server.contollers.Winform.DTO
     {
         public int? IdChuyenMon { get; set; }
 
-
         public string? MoTa { get; set; }
-
+        
         public string? MucTieu { get; set; }
 
         public double? HocPhi { get; set; }
@@ -21,7 +20,8 @@ namespace server.contollers.Winform.DTO
         public IFormFile? HinhAnh { get; set; }
 
         public string? TenKhoaHoc { get; set; }
-        
+
+        public string? LoTrinh { get; set; }
 
     }
 }

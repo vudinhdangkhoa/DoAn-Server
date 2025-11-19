@@ -163,7 +163,7 @@ namespace server.contollers.TrangChu
                 khoaHoc.MoTa,
                 khoaHoc.MucTieu,
                 hinhAnh = $"/image/imageKhoaHoc/" + khoaHoc.HinhAnh,
-
+                khoaHoc.LoTrinh,
                 chuyenMon = new
                 {
                     khoaHoc.IdChuyenMonNavigation.IdChuyenMon,
@@ -200,7 +200,7 @@ namespace server.contollers.TrangChu
         [HttpGet("GetAllHocVienCuaPhuHuynh/{phuHuynhId}")]
         public async Task<IActionResult> GetAllHocVienCuaPhuHuynh(int phuHuynhId)
         {
-            var hocViens = await db.HocViens.Where(hv => hv.IdPhuHuynh == phuHuynhId).Select(hv => new
+            var hocViens = await db.HocViens.Where(hv => hv.IdPhuHuynh == phuHuynhId && hv.LaPhuHuynh == false).Select(hv => new
             {
                 id = hv.IdHocVien,
                 tenHV = hv.TenHv,

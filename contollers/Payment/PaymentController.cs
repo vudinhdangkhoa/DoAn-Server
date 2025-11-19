@@ -42,7 +42,7 @@ namespace server.contollers.Payment
             {
 
                 PhuHuynh phuHuynh = await _context.PhuHuynhs.FirstOrDefaultAsync(t => t.UserId == request.PhuHuynhId);
-                var checkExist = await _context.HocViens.FirstOrDefaultAsync(hv => hv.TenHv == phuHuynh.TenPh && hv.IdPhuHuynh == phuHuynh.UserId);
+                var checkExist = await _context.HocViens.FirstOrDefaultAsync(hv => hv.LaPhuHuynh == true && hv.IdPhuHuynh == phuHuynh.UserId);
                 if (checkExist != null)
                 {
                     request.HocVienId = checkExist.IdHocVien;
@@ -57,6 +57,7 @@ namespace server.contollers.Payment
                         NgayTao = DateOnly.FromDateTime(DateTime.Now),
                         IdPhuHuynh = phuHuynh.UserId,
                         GioiTinh = phuHuynh.GioiTinh,
+                        LaPhuHuynh = true
 
                     };
                     await _context.HocViens.AddAsync(newHocVien);
@@ -250,7 +251,7 @@ namespace server.contollers.Payment
             {
                 isSuccess = true;
             }
-            else if (request.ContainsKey("status") && request["status"] == "success") // Từ VNPay (hoặc logic tự định nghĩa)
+            else if (request.ContainsKey("vnp_ResponseCode") && request["vnp_ResponseCode"] == "00") // Từ VNPay (hoặc logic tự định nghĩa)
             {
                 isSuccess = true;
             }

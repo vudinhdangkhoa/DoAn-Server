@@ -90,7 +90,8 @@ namespace server.contollers.Winform
                 HocPhi = khoaHoc.HocPhi,
                 SoLuongBuoi = khoaHoc.SoLuongBuoi,
                 TenKhoaHoc = khoaHoc.TenKhoaHoc,
-                NgayTao = DateOnly.FromDateTime(DateTime.Now)
+                NgayTao = DateOnly.FromDateTime(DateTime.Now),
+                LoTrinh = khoaHoc.LoTrinh
             };
 
             //Xử lý hình ảnh

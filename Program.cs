@@ -182,21 +182,50 @@ try
                 dbContext.SaveChanges();
             }
         }
-        if (dbContext.ChuyenMons.Any() == false)
+        if (!dbContext.ChuyenMons.Any())
         {
             var chuyenMons = new List<ChuyenMon>
             {
-                new ChuyenMon { TenChuyenMon = "Mỹ thuật thiếu nhi", MoTa = "Khi khả năng ngôn ngữ phát triển chưa hoàn thiện, hội họa là phương tiện để diễn đạt hiệu quả. Nét vẽ nguệch ngoạc, hồn nhiên, bình dị nhưng rất cần thiết trong quá trình hình thành khả năng cảm thụ cái đẹp và tư duy sáng tạo của trẻ. Đó là cảm xúc, tình cảm, ước mơ khám phá thế giới  xung quanh mà trẻ thể hiện trên trang giấy", HinhAnh = "MyThuatThieuNhi.jpg" },
-                new ChuyenMon { TenChuyenMon = "Sơn dầu", MoTa = "Tranh sơn dầu được rất nhiều người yêu mến hội họa yêu thích với phong cách mềm mại, bóng bẩy đầy ma lực và sự lôi cuốn.", HinhAnh = "SonDau.jpg" },
-                new ChuyenMon { TenChuyenMon = "Màu nước", MoTa = "Màu nước thường được dùng với bút pháp rộng rãi, xây dựng bố cục bằng những mảng lớn nhưng lại sâu sắc, mượt mà về sắc điệu gây một cảm giác rung động khó tả. Đây là loại chất liệu khó sử dụng nên phụ thuộc rất nhiều vào tài năng sáng tạo và khí chất của người vẽ .“Cứ vẽ đi vẽ lại một trăm lần thì bức tranh sẽ đơn giản đi”.", HinhAnh = "MauNuoc.jpg" },
-                new ChuyenMon { TenChuyenMon = "Màu Acrylic", MoTa = "Màu Acrylic là loại màu có độ phủ cao, độ bám dính cực tốt, màu sắc rất đa dạng, không độc hại, không phai màu, không thấm nước. Với đặc tính đó, kết hợp với sự đơn gian cùng với các kỹ thuật đa dạng sẽ giúp cho người học đắm chìm trong thể loại tranh Arcylic với thời gian ngắn.", HinhAnh = "MauAcrylic.jpg" },
-
-                new ChuyenMon {TenChuyenMon="Hình họa - Vẽ chân dung",MoTa="Hình họa là môn học cơ bản nhằm rèn luyện nhận thức thẩm mỹ và kỹ năng thể hiện hình khối không gian. Khóa học giúp học viên nắm vững kiến thức, phát triển kỹ năng hội họa, tự tin thể hiện các ý tưởng và các bài thi về hình họa.",HinhAnh="ChanDung.jpg"},
-                new ChuyenMon {TenChuyenMon="Luyện thi khôi H",MoTa="KSL khuyến khích các bạn nên bắt đầu học luyện sớm ngay khi nhận ra được đam mê của mình, để bạn có đủ thời gian học từ CĂN BẢN lên NÂNG CAO, điều đó sẽ giúp bạn có  nền tảng vững chắc và tự tin cho kỳ thi tuyển sinh của mình.",HinhAnh="LuyenThiKhoiH.jpg"},
+                new ChuyenMon
+                {
+                    TenChuyenMon = "Mỹ thuật thiếu nhi",
+                    MoTa = "Tại PPA, hội họa là ngôn ngữ đầu đời của trẻ. Khi ngôn từ chưa đủ để diễn đạt, những nét vẽ ngây ngô chính là cửa sổ tâm hồn, giúp bé tự do khám phá và thể hiện thế giới quan sinh động. Khóa học không chỉ dạy vẽ mà còn nuôi dưỡng tư duy sáng tạo, chỉ số cảm xúc (EQ) và khả năng cảm thụ cái đẹp từ sớm.",
+                    HinhAnh = "MyThuatThieuNhi.jpg"
+                },
+                new ChuyenMon
+                {
+                    TenChuyenMon = "Sơn dầu",
+                    MoTa = "Được mệnh danh là 'Vua của các chất liệu', tranh sơn dầu tại PPA mang đến vẻ đẹp của sự vĩnh cửu. Với độ phủ dày, khả năng phối màu uyển chuyển và độ bền vượt thời gian, học viên sẽ được trải nghiệm sự mê hoặc của những lớp màu chồng chất, tạo nên những tác phẩm có chiều sâu và sự lôi cuốn đầy ma lực.",
+                    HinhAnh = "SonDau.jpg"
+                },
+                new ChuyenMon
+                {
+                    TenChuyenMon = "Màu nước",
+                    MoTa = "Vẻ đẹp của màu nước nằm ở sự trong trẻo, loang màu ngẫu hứng và đầy chất thơ. Đây là bộ môn nghệ thuật của sự tinh tế, nơi người vẽ học cách 'chơi' đùa cùng nước và sắc màu. Tại PPA, bạn sẽ học cách kiểm soát sự loang chảy để tạo ra những bức tranh nhẹ nhàng, bay bổng nhưng vẫn đầy ắp cảm xúc.",
+                    HinhAnh = "MauNuoc.jpg"
+                },
+                new ChuyenMon
+                {
+                    TenChuyenMon = "Màu Acrylic",
+                    MoTa = "Hiện đại, linh hoạt và rực rỡ - đó là Acrylic. Với ưu điểm khô nhanh, bền màu và độ bám dính tuyệt vời, Acrylic cho phép bạn thỏa sức sáng tạo trên mọi chất liệu từ vải toan, gỗ đến tường. Khóa học tại PPA giúp bạn làm chủ kỹ thuật pha màu để tạo nên những tác phẩm ấn tượng trong thời gian ngắn nhất.",
+                    HinhAnh = "MauAcrylic.jpg"
+                },
+                new ChuyenMon
+                {
+                    TenChuyenMon = "Hình họa - Vẽ chân dung",
+                    MoTa = "Hình họa là chiếc chìa khóa vạn năng mở ra cánh cửa hội họa chuyên nghiệp. Khóa học tại PPA giúp bạn thấu hiểu cấu trúc giải phẫu, tỉ lệ vàng và cách diễn tả khối trong không gian. Từ những nét chì đánh bóng cơ bản, bạn sẽ tự tin lột tả được thần thái và cái 'hồn' sâu sắc của nhân vật trên trang giấy.",
+                    HinhAnh = "ChanDung.jpg"
+                },
+                new ChuyenMon
+                {
+                    TenChuyenMon = "Luyện thi khối H",
+                    MoTa = "PPA đồng hành cùng giấc mơ giảng đường của bạn. Chúng tôi hiểu rằng nền tảng vững chắc phải được xây dựng từ sớm. Lộ trình luyện thi được thiết kế bài bản từ Căn bản đến Nâng cao, sát với cấu trúc đề thi đại học, giúp sĩ tử rèn luyện tư duy bố cục, kỹ năng hình họa và tự tin chinh phục mọi kỳ thi tuyển sinh.",
+                    HinhAnh = "LuyenThiKhoiH.jpg"
+                },
             };
 
-            dbContext.ChuyenMons.AddRange(chuyenMons);
-            dbContext.SaveChanges();
+            await dbContext.ChuyenMons.AddRangeAsync(chuyenMons);
+            await dbContext.SaveChangesAsync();
         }
         if (dbContext.PhongHocs.Any() == false)
         {
@@ -215,161 +244,161 @@ try
         {
             var khoaHocs = new List<KhoaHoc>
             {
-                // === Mỹ thuật thiếu nhi ===
+                // ============================================================
+                // 1. MỸ THUẬT THIẾU NHI
+                // ============================================================
                 new KhoaHoc
                 {
                     IdChuyenMon = 1,
-                    TenKhoaHoc = "Mỹ thuật thiếu nhi Căn Bản",
-                    MoTa = "Khóa học xây dựng nền tảng mỹ thuật cho trẻ qua các hoạt động vui chơi với màu sắc, hình khối và chất liệu đa dạng. Bé được tự do khám phá và thể hiện thế giới quan sinh động của mình.",
-                    MucTieu = "Kích thích khả năng quan sát, trí tưởng tượng và sự tự tin của trẻ. Giúp trẻ làm quen với các dụng cụ vẽ cơ bản và phát triển vận động tinh qua các hoạt động tạo hình.",
-                    HocPhi = 2200000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Mỹ thuật thiếu nhi: Khám phá sắc màu",
+                    MoTa = "Khóa học nhập môn dành cho bé từ 6-9 tuổi. Đây là bước đệm quan trọng giúp bé làm quen với nghệ thuật mà không bị gò bó, chuẩn bị nền tảng cho khóa Nâng cao.",
+                    MucTieu = "Giúp trẻ nhận biết màu sắc, hình khối cơ bản. Kích thích trí tưởng tượng và rèn luyện sự khéo léo của đôi tay.",
+                    LoTrinh = "- Phần 1 (Buổi 1-3): Làm quen với màu sáp, màu nước. Học cách pha màu cơ bản.\n- Phần 2 (Buổi 4-7): Vẽ các hình khối đơn giản, thiên nhiên, động vật qua cái nhìn ngộ nghĩnh.\n- Phần 3 (Buổi 8): Sáng tạo tranh theo chủ đề tự do và hoàn thiện bài tốt nghiệp.",
+                    HocPhi = 1600000, // ~200k/buổi
+                    SoLuongBuoi = 8,
                     HinhAnh = "thieuNhi1.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
                 },
                 new KhoaHoc
                 {
                     IdChuyenMon = 1,
-                    TenKhoaHoc = "Mỹ thuật thiếu nhi Nâng Cao",
-                    MoTa = "Chương trình học sâu hơn về bố cục, phối màu và kỹ thuật vẽ theo chủ đề. Trẻ được hướng dẫn để kể những câu chuyện sáng tạo thông qua tác phẩm của mình một cách bài bản hơn.",
-                    MucTieu = "Phát triển tư duy kể chuyện bằng hình ảnh. Nâng cao kỹ năng sử dụng màu sắc và tạo hình nhân vật, không gian. Xây dựng sự tự tin và phong cách cá nhân cho trẻ.",
-                    HocPhi = 3500000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Mỹ thuật thiếu nhi: Tư duy sáng tạo",
+                    MoTa = "Dành cho các bé đã qua lớp căn bản hoặc có năng khiếu (9-15 tuổi). Học viên sẽ học cách kể chuyện qua tranh và xử lý bố cục phức tạp hơn.",
+                    MucTieu = "Phát triển tư duy không gian, bố cục tranh. Biết cách phối màu theo cảm xúc và xây dựng nhân vật có chiều sâu.",
+                    LoTrinh = "- Phần 1 (Buổi 1-3): Kiến thức về xa gần (luật phối cảnh), bố cục tranh sinh hoạt.\n- Phần 2 (Buổi 4-10): Thiết kế nhân vật, trang phục và bối cảnh câu chuyện.\n- Phần 3 (Buổi 11-12): Thực hiện dự án truyện tranh ngắn hoặc tranh khổ lớn trưng bày.",
+                    HocPhi = 2760000, // ~230k/buổi (cao hơn do kỹ thuật khó hơn)
+                    SoLuongBuoi = 12,
                     HinhAnh = "thieuNhi2.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
                 },
 
-                // === Sơn dầu ===
+                // ============================================================
+                // 2. SƠN DẦU (OIL PAINTING)
+                // ============================================================
                 new KhoaHoc
                 {
                     IdChuyenMon = 2,
-                    TenKhoaHoc = "Sơn dầu Căn Bản",
-                    MoTa = "Khóa học nhập môn về chất liệu sơn dầu, bao gồm cách pha màu, sử dụng các loại bút vẽ, và các kỹ thuật vẽ cơ bản như đi nét, đánh bóng, tạo khối.",
-                    MucTieu = "Hiểu rõ đặc tính của sơn dầu. Nắm vững kỹ thuật pha màu cơ bản và cách thể hiện ánh sáng, bóng đổ. Hoàn thiện một bức tranh tĩnh vật đơn giản.",
-                    HocPhi = 3000000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Sơn dầu nhập môn: Tĩnh vật & Phong cảnh",
+                    MoTa = "Làm quen với 'Vua của các chất liệu'. Khóa học hướng dẫn từ cách căng toan, pha dung môi đến hoàn thiện bức tranh đầu tiên. Là nền tảng bắt buộc trước khi học vẽ chân dung.",
+                    MucTieu = "Hiểu đặc tính sơn dầu. Nắm vững kỹ thuật lót nền, vờn khối, tả chất liệu vải, gốm, sứ.",
+                    LoTrinh = "- Giai đoạn 1 (4 buổi): Lý thuyết về màu, dung môi, cọ. Tập chép tranh tĩnh vật đơn giản.\n- Giai đoạn 2 (6 buổi): Vẽ tĩnh vật phức tạp, luyện tập tả chất liệu (kim loại, thủy tinh).\n- Giai đoạn 3 (6 buổi): Vẽ phong cảnh cơ bản, học về không gian và ánh sáng.",
+                    HocPhi = 4000000, // ~250k/buổi (Vật liệu đắt)
+                    SoLuongBuoi = 16,
                     HinhAnh = "sonDau1.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
                 },
                 new KhoaHoc
                 {
                     IdChuyenMon = 2,
-                    TenKhoaHoc = "Sơn dầu Nâng Cao",
-                    MoTa = "Đi sâu vào các kỹ thuật phức tạp như vẽ nhiều lớp (glazing), vẽ dày (impasto) và nghiên cứu chuyên sâu về vẽ chân dung, phong cảnh bằng sơn dầu.",
-                    MucTieu = "Làm chủ các kỹ thuật vẽ sơn dầu phức tạp. Định hình phong cách nghệ thuật cá nhân. Tự tin sáng tác các tác phẩm có chiều sâu và cảm xúc.",
-                    HocPhi = 5000000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Sơn dầu chuyên sâu: Kỹ thuật Cổ điển",
+                    MoTa = "Khóa học nâng cao dành cho người đã nắm vững kỹ thuật sơn dầu cơ bản. Đi sâu vào kỹ thuật vẽ nhiều lớp (Glazing) và vẽ đắp dày (Impasto).",
+                    MucTieu = "Định hình phong cách cá nhân. Có khả năng chép tranh cổ điển hoặc sáng tác tranh theo ý tưởng riêng.",
+                    LoTrinh = "- Phần 1 (Buổi 1-8): Nghiên cứu kỹ thuật Glazing (vẽ láng) để tạo chiều sâu màu sắc.\n- Phần 2 (Buổi 9-16): Kỹ thuật Impasto (vẽ dày) tạo chất cảm mạnh mẽ.\n- Phần 3 (Buổi 17-24): Thực hiện tác phẩm tốt nghiệp khổ lớn (Chân dung hoặc Phong cảnh phức tạp).",
+                    HocPhi = 7200000, // ~300k/buổi
+                    SoLuongBuoi = 24,
                     HinhAnh = "sonDau2.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
                 },
 
-                // === Màu nước ===
+                // ============================================================
+                // 3. MÀU NƯỚC (WATERCOLOR)
+                // ============================================================
                 new KhoaHoc
                 {
                     IdChuyenMon = 3,
-                    TenKhoaHoc = "Màu nước Căn Bản",
-                    MoTa = "Khóa học giới thiệu về sự kỳ diệu của màu nước, từ cách kiểm soát lượng nước, loang màu, đến các kỹ thuật cơ bản như vẽ ướt trên ướt và ướt trên khô.",
-                    MucTieu = "Hiểu được tính chất trong trẻo và ngẫu hứng của màu nước. Nắm vững các kỹ thuật cơ bản để tạo hiệu ứng. Thực hành vẽ các chủ đề đơn giản như hoa lá, đồ vật.",
-                    HocPhi = 2800000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Màu nước: Sự kỳ diệu của Nước",
+                    MoTa = "Khóa học giúp bạn kiểm soát sự 'đỏng đảnh' của màu nước. Phù hợp cho người mới bắt đầu yêu thích sự nhẹ nhàng, trong trẻo.",
+                    MucTieu = "Kiểm soát lượng nước và màu. Thành thạo kỹ thuật loang màu (Wet-on-wet) và vẽ chồng lớp (Wet-on-dry).",
+                    LoTrinh = "- Tuần 1-2: Làm quen giấy, cọ. Kỹ thuật loang màu phẳng và chuyển sắc.\n- Tuần 3-4: Vẽ hoa lá, thực hành kỹ thuật tỉa chi tiết.\n- Tuần 5-6: Vẽ phong cảnh bầu trời, mặt nước đơn giản.",
+                    HocPhi = 2500000,
+                    SoLuongBuoi = 12,
                     HinhAnh = "mauNuoc1.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
                 },
                 new KhoaHoc
                 {
                     IdChuyenMon = 3,
-                    TenKhoaHoc = "Màu nước Nâng Cao",
-                    MoTa = "Nghiên cứu sâu về các kỹ thuật khó như masking, cạo màu, sử dụng muối và cồn để tạo hiệu ứng đặc biệt. Tập trung vào vẽ phong cảnh và chân dung màu nước.",
-                    MucTieu = "Thành thạo việc kiểm soát nước và màu sắc. Sáng tạo với các hiệu ứng đặc biệt. Thể hiện được chiều sâu và không khí trong tranh phong cảnh, chân dung.",
-                    HocPhi = 4500000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Màu nước: Chân dung & Minh họa",
+                    MoTa = "Nâng cao kỹ năng màu nước để vẽ chân dung và minh họa sách/truyện. Yêu cầu học viên đã biết kỹ thuật màu nước cơ bản.",
+                    MucTieu = "Tả được da người, ngũ quan bằng màu nước. Sử dụng mixed-media (kết hợp bút kim, màu chì) trong tranh minh họa.",
+                    LoTrinh = "- Phần 1 (6 buổi): Nghiên cứu giải phẫu khuôn mặt, cách pha màu da (skin tone).\n- Phần 2 (6 buổi): Vẽ chân dung bán thân, xử lý tóc và trang phục.\n- Phần 3 (4 buổi): Sáng tác tranh minh họa theo phong cách Fantasy hoặc Fashion.",
+                    HocPhi = 3800000,
+                    SoLuongBuoi = 16,
                     HinhAnh = "mauNuoc2.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
                 },
-                
-                // === Màu Acrylic ===
+
+                // ============================================================
+                // 4. MÀU ACRYLIC
+                // ============================================================
                 new KhoaHoc
                 {
                     IdChuyenMon = 4,
-                    TenKhoaHoc = "Màu Acrylic Căn Bản",
-                    MoTa = "Khám phá sự linh hoạt của màu Acrylic, một chất liệu khô nhanh và đa dụng. Học viên sẽ học cách pha màu, chồng lớp và các kỹ thuật cơ bản để bắt đầu sáng tác.",
-                    MucTieu = "Nắm rõ ưu và nhược điểm của màu Acrylic. Làm chủ kỹ thuật pha màu và đi nét. Hoàn thành được một tác phẩm tranh trừu tượng hoặc phong cảnh đơn giản.",
-                    HocPhi = 2700000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Acrylic: Vẽ tranh Decor ứng dụng",
+                    MoTa = "Acrylic là chất liệu khô nhanh, bền màu và dễ sửa chữa. Khóa học này tập trung vào việc vẽ tranh trang trí nội thất.",
+                    MucTieu = "Tự tay vẽ được tranh treo tường, vẽ lên vải (tote bag, áo) hoặc vẽ lên gỗ/đá.",
+                    LoTrinh = "- Giai đoạn 1: Kỹ thuật pha màu Acrylic, cách đi cọ tạo texture.\n- Giai đoạn 2: Chép tranh phong cảnh hiện đại, tranh trừu tượng.\n- Giai đoạn 3: Thực hành vẽ trên chất liệu khác (vải canvas, gỗ) để làm sản phẩm ứng dụng.",
+                    HocPhi = 2200000,
+                    SoLuongBuoi = 12,
                     HinhAnh = "mauAcrylic1.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
                 },
-                new KhoaHoc
-                {
-                    IdChuyenMon = 4,
-                    TenKhoaHoc = "Màu Acrylic Nâng Cao",
-                    MoTa = "Khóa học tập trung vào việc ứng dụng Acrylic trong các phong cách nghệ thuật khác nhau, từ tả thực đến pop-art. Tìm hiểu các chất phụ gia (medium) để thay đổi đặc tính của màu.",
-                    MucTieu = "Sử dụng thành thạo các loại medium. Phát triển khả năng sáng tác trên nhiều chất liệu nền khác nhau. Tự tin thể hiện ý tưởng nghệ thuật phức tạp bằng Acrylic.",
-                    HocPhi = 4200000,
-                    SoLuongBuoi = 36,
-
-                    HinhAnh = "mauAcrylic2.jpg",
-                    NgayTao = DateOnly.FromDateTime(DateTime.Now)
-                },
                 
-                // === Hình họa - Vẽ chân dung ===
+                // ============================================================
+                // 5. HÌNH HỌA (SKETCHING)
+                // ============================================================
                 new KhoaHoc
                 {
                     IdChuyenMon = 5,
-                    TenKhoaHoc = "Hình họa - Chân dung Căn Bản",
-                    MoTa = "Xây dựng nền tảng vững chắc về dựng hình, tỷ lệ và giải phẫu khuôn mặt. Học viên sẽ được luyện tập cách quan sát và dựng hình khối cơ bản của đầu, mắt, mũi, miệng.",
-                    MucTieu = "Nắm vững tỷ lệ vàng của khuôn mặt. Dựng hình chính xác các chi tiết ngũ quan. Hiểu về cấu trúc khối và cách đi nét để tạo cảm giác không gian.",
-                    HocPhi = 3200000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Hình họa chì: Nền tảng vạn vật",
+                    MoTa = "Khóa học quan trọng nhất cho bất kỳ ai muốn theo đuổi mỹ thuật chuyên nghiệp. Tập trung vào dựng hình và đánh bóng.",
+                    MucTieu = "Rèn luyện mắt quan sát tỉ lệ chính xác. Hiểu về cấu trúc khối, ánh sáng và bóng đổ.",
+                    LoTrinh = "- Level 1 (Buổi 1-5): Dựng các khối cơ bản (vuông, tròn, chóp). Tập đánh bóng tạo khối.\n- Level 2 (Buổi 6-10): Vẽ tĩnh vật tổ hợp (lọ hoa, quả, vải).\n- Level 3 (Buổi 11-16): Dựng hình đầu tượng phạt mảng (cơ sở để vẽ chân dung).",
+                    HocPhi = 2800000,
+                    SoLuongBuoi = 16,
                     HinhAnh = "hinhHoa-chanDung1.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
                 },
                 new KhoaHoc
                 {
                     IdChuyenMon = 5,
-                    TenKhoaHoc = "Hình họa - Chân dung Nâng Cao",
-                    MoTa = "Tập trung vào việc lột tả thần thái và cảm xúc của nhân vật. Nghiên cứu sâu về chất liệu (da, tóc, vải) và cách diễn tả chúng bằng chì, than.",
-                    MucTieu = "Nâng cao khả năng diễn tả cảm xúc nhân vật. Làm chủ kỹ thuật tả chất liệu. Hoàn thiện các bức chân dung có hồn và chiều sâu.",
-                    HocPhi = 5500000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Hình họa chì: Chân dung truyền thần",
+                    MoTa = "Bước tiếp theo sau khóa hình họa cơ bản. Tập trung sâu vào ngũ quan và cảm xúc con người.",
+                    MucTieu = "Vẽ được chân dung người thật sống động. Tả kỹ các chất liệu tóc, da, mắt.",
+                    LoTrinh = "- Phần 1: Chi tiết ngũ quan (Mắt, Mũi, Miệng, Tai) ở các góc độ.\n- Phần 2: Dựng hình chân dung nam/nữ, người già/trẻ em.\n- Phần 3: Hoàn thiện chân dung tả thực với kỹ thuật đánh bóng chì than.",
+                    HocPhi = 4200000,
+                    SoLuongBuoi = 20,
                     HinhAnh = "hinhHoa-chanDung2.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
                 },
 
-                // === Luyện thi khối H ===
+                // ============================================================
+                // 6. LUYỆN THI KHỐI H (KIẾN TRÚC/MỸ THUẬT)
+                // ============================================================
                 new KhoaHoc
                 {
                     IdChuyenMon = 6,
-                    TenKhoaHoc = "Luyện thi khối H - Nền tảng",
-                    MoTa = "Chương trình được thiết kế để xây dựng nền tảng vững chắc về hình họa (đầu tượng, tĩnh vật) và trang trí màu, bám sát cấu trúc đề thi của các trường đại học.",
-                    MucTieu = "Nắm vững kiến thức căn bản về dựng hình, sắc độ, bố cục. Hiểu nguyên lý màu sắc và cách điệu. Làm quen với áp lực thời gian và không khí phòng thi.",
-                    HocPhi = 3800000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Luyện thi Đại học Khối H - Dài hạn",
+                    MoTa = "Chương trình chuẩn bị toàn diện cho kỳ thi đại học (Mỹ thuật CN, Kiến trúc...). Đi từ con số 0 đến khi thi. Khóa học nặng về kỹ thuật và tư duy bố cục.",
+                    MucTieu = "Đạt điểm cao môn Hình họa (Người) và Trang trí màu. Nắm vững các dạng đề thi các năm.",
+                    LoTrinh = "- Học kỳ 1: Hình họa cơ bản (Khối -> Tượng) và Nguyên lý màu sắc cơ bản.\n- Học kỳ 2: Hình họa nâng cao (Tượng chân dung) và Trang trí màu (Hàng lối, Đăng đối).\n- Học kỳ 3: Luyện đề thi thử, sửa lỗi sai, rèn tốc độ làm bài.",
+                    HocPhi = 8000000, // Khóa dài hạn, kiến thức nặng
+                    SoLuongBuoi = 40,
                     HinhAnh = "khoiH1.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
                 },
                 new KhoaHoc
                 {
                     IdChuyenMon = 6,
-                    TenKhoaHoc = "Luyện thi khối H - Cấp tốc",
-                    MoTa = "Khóa học tập trung vào việc giải đề, phân tích các lỗi sai thường gặp và rèn luyện kỹ năng, chiến thuật làm bài thi để tối ưu hóa điểm số trong thời gian ngắn.",
-                    MucTieu = "Thành thạo các dạng đề thi. Tối ưu hóa tốc độ và hiệu quả làm bài. Nâng cao kỹ năng phân tích đề và xây dựng bố cục. Tự tin bước vào kỳ thi quan trọng.",
-                    HocPhi = 6000000,
-                    SoLuongBuoi = 36,
-
+                    TenKhoaHoc = "Luyện thi Khối H - Giải đề cấp tốc",
+                    MoTa = "Dành cho các bạn đã có nền tảng, cần tổng ôn và luyện kỹ năng phòng thi trong 2 tháng cuối trước kỳ thi.",
+                    MucTieu = "Tối ưu hóa điểm số. Khắc phục các lỗi sai thường gặp khi áp lực thời gian. Biết 'mẹo' làm bài thi hiệu quả.",
+                    LoTrinh = "- Tuần 1-4: Giải bộ đề hình họa và trang trí màu các trường Top (MTCN, Kiến Trúc HN/HCM).\n- Tuần 5-8: Thi thử dưới áp lực thời gian thực (4h/bài). Chấm chữa bài 1:1 chi tiết.",
+                    HocPhi = 5500000, // Cấp tốc, cường độ cao
+                    SoLuongBuoi = 24, // 3 buổi/tuần x 8 tuần
                     HinhAnh = "khoiH2.jpg",
                     NgayTao = DateOnly.FromDateTime(DateTime.Now)
-                },
+                }
             };
 
             await dbContext.KhoaHocs.AddRangeAsync(khoaHocs);
@@ -393,7 +422,7 @@ try
         {
             var lopHocs = new List<LopHoc>
             {
-                 new LopHoc{TenLopHoc="Lớp thiếu nhi căn bản thầy Trung",IdPhong=1,IdKhoaHoc=1,NgayKhaiGiang= DateOnly.FromDateTime(DateTime.Now.AddDays(7)),SoLuongBuoi=36,SoBuoiTrenTuan="1,3,5",NgayTao= DateOnly.FromDateTime(DateTime.Now),SoLuongHv=0,SoLuongToiDa=10,SoLuongToiThieu=5,ThoiGianBatDau=TimeOnly.FromTimeSpan(new TimeSpan(15,0,0)),ThoiGianKetThuc=TimeOnly.FromTimeSpan(new TimeSpan(17,0,0)),TrangThai=DungChung.trangThaiLopHoc_DangMo},
+                 new LopHoc{TenLopHoc="Lớp thiếu nhi căn bản thầy Trung",IdPhong=1,IdKhoaHoc=1,NgayKhaiGiang= DateOnly.FromDateTime(DateTime.Now.AddDays(7)),SoLuongBuoi=36,SoBuoiTrenTuan="7",NgayTao= DateOnly.FromDateTime(DateTime.Now),SoLuongHv=0,SoLuongToiDa=10,SoLuongToiThieu=5,ThoiGianBatDau=TimeOnly.FromTimeSpan(new TimeSpan(15,0,0)),ThoiGianKetThuc=TimeOnly.FromTimeSpan(new TimeSpan(17,0,0)),TrangThai=DungChung.trangThaiLopHoc_DangMo},
             };
             dbContext.LopHocs.AddRange(lopHocs);
             dbContext.SaveChanges();
