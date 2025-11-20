@@ -46,7 +46,15 @@ namespace server.contollers.Winform
                 t.MoTa,
                 t.NgayTao,
                 t.HocPhi,
-
+                giamGia = (t.HocPhi * db.CacKhoaHocKhuyenMais
+                    .Include(ckh => ckh.IdKhuyenMaiNavigation)
+                    .Where(ckh => ckh.IdKhoaHoc == t.IdKhoaHoc
+                        && ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.SoLuong > 0
+                        && ckh.IdKhuyenMaiNavigation != null)
+                    .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
+                    .Max() ?? 0),
                 t.SoLuongBuoi,
                 LopHocs = t.LopHocs // Lấy tất cả trước
             }).ToListAsync();
@@ -60,6 +68,7 @@ namespace server.contollers.Winform
                 t.NgayTao,
                 t.HocPhi,
                 t.SoLuongBuoi,
+                t.giamGia,
                 lopHocs = t.LopHocs.Where(l =>
                     l.NgayKhaiGiang.HasValue &&
                     l.SoLuongBuoi.HasValue &&

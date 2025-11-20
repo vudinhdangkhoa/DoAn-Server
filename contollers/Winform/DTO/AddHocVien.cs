@@ -10,6 +10,7 @@ namespace server.contollers.Winform.DTO
         public string? tenPH { get; set; }
         public string? sdt { get; set; }
         public string? email { get; set; }
+        public string? gioiTinh { get; set; }
         public DateOnly? ngaySinhPH { get; set; }
         public List<hocVienDTO>? DSHocVien { get; set; }
     }

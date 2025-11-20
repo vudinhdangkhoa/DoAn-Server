@@ -166,6 +166,7 @@ namespace server.contollers.Winform
                                 .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
                                 .Max() ?? 0)
                             };
+                            lopHoc.SoLuongHv += 1;
                             db.HoaDonKhoaHocs.Add(hoaDon);
                         }
                     }
