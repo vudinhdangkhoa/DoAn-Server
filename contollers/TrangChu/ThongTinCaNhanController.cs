@@ -49,10 +49,10 @@ namespace server.contollers.TrangChu
                     hv.IdHocVien,
                     hv.TenHv,
                     hv.NgaySinh,
-                    avatar = hv.Avartar.StartsWith("http") ? hv.Avartar : $"/image/imageHocVien/{hv.Avartar}",
+                    avatar = string.IsNullOrEmpty(hv.Avartar) ? null : (hv.Avartar.StartsWith("http") ? hv.Avartar : $"/image/imageHocVien/{hv.Avartar}"),
 
                 }),
-                avatar = phuHuynh.Avatar.StartsWith("http") ? phuHuynh.Avatar : $"/image/imagePhuhuynh/{phuHuynh.Avatar}"
+                avatar =string.IsNullOrEmpty(phuHuynh.Avatar) ? null : (phuHuynh.Avatar.StartsWith("http") ? phuHuynh.Avatar : $"/image/imagePhuhuynh/{phuHuynh.Avatar}")
             };
 
             return Ok(result);

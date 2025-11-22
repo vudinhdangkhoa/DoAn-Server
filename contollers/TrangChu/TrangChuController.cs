@@ -46,7 +46,9 @@ namespace server.contollers.TrangChu
                 thongTinHocVien.NgaySinh,
                 thongTinHocVien.Sdt,
 
-                avatar = thongTinHocVien.Avatar.StartsWith("http") ? thongTinHocVien.Avatar : string.IsNullOrEmpty(thongTinHocVien.Avatar) ? null : $"/image/imagePhuhuynh/{thongTinHocVien.Avatar}"
+                avatar = string.IsNullOrEmpty(thongTinHocVien.Avatar) 
+                ? null
+                : (thongTinHocVien.Avatar.StartsWith("http") ? thongTinHocVien.Avatar : $"/image/imagePhuhuynh/{thongTinHocVien.Avatar}")
             };
 
             return Ok(result);
@@ -124,7 +126,7 @@ namespace server.contollers.TrangChu
                         && ckh.SoLuong > 0
                         && ckh.IdKhuyenMaiNavigation != null)
                     .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
-                    .Max()?? 0) ,
+                    .Max() ?? 0),
                 thoiGianHoc = kh.SoLuongBuoi,
                 moTa = kh.MoTa,
                 mucTieu = kh.MucTieu,

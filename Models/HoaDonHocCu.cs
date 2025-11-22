@@ -19,6 +19,8 @@ public partial class HoaDonHocCu
 
     public string? TenKh { get; set; }
 
+    public DateOnly? Ngaytao { get; set; }
+
     public virtual ICollection<ChiTietHoaDonHocCu> ChiTietHoaDonHocCus { get; set; } = new List<ChiTietHoaDonHocCu>();
 
     public virtual PhuHuynh? IdKhachHangNavigation { get; set; }

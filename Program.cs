@@ -145,6 +145,66 @@ try
     using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<MyDbContext>();
+
+        if(dbContext.KhuyenMais.Any() == false)
+        {
+            var khuyenMai = new KhuyenMai
+            {
+                TenKhuyenMai = "Khuyến mãi back to school",
+                PhanTramKhuyenMai = 0.1
+            };
+            dbContext.KhuyenMais.Add(khuyenMai);
+            dbContext.SaveChanges();
+        }
+
+        if (dbContext.NhaCungCaps.Any() == false)
+        {
+            var nhaCungCaps = new List<NhaCungCap>
+            {
+                new NhaCungCap { TenNhaCungCap = "Công ty TNHH Mỹ Thuật Vạn Phát", Sdt = "0123456789" },
+                new NhaCungCap { TenNhaCungCap = "Cửa Hàng Vật Tư Nghệ Thuật An Thanh", Sdt = "0987654321" },
+                new NhaCungCap { TenNhaCungCap = "Nhà Sách Nghệ Thuật Mỹ Tâm", Sdt = "0912345678" }
+            };
+            dbContext.NhaCungCaps.AddRange(nhaCungCaps);
+            dbContext.SaveChanges();
+        }
+
+        if (dbContext.LoaiHocCus.Any() == false)
+        {
+            
+            var loaiHocCus = new List<LoaiHocCu>
+            {
+                new LoaiHocCu { TenLoai = "Bút chì" },
+                new LoaiHocCu { TenLoai = "Màu nước" },
+                new LoaiHocCu { TenLoai = "Màu Acrylic" },
+                new LoaiHocCu { TenLoai = "Sơn dầu" },
+                new LoaiHocCu { TenLoai = "Cọ vẽ" },
+                new LoaiHocCu { TenLoai = "Giấy vẽ" },
+                new LoaiHocCu { TenLoai = "Khung vẽ" },
+                new LoaiHocCu { TenLoai = "Bảng màu" }
+            };
+            dbContext.LoaiHocCus.AddRange(loaiHocCus);
+            dbContext.SaveChanges();
+
+        }
+        if(dbContext.HocCus.Any() == false)
+        {
+            var hocCus = new List<HocCu>
+            {
+                new HocCu { TenHocCu="Bút chì 2B", IdLoaiHocCu=1, DonViTinh="Cái", GiaBan=5000, SoLuong=100 },
+                new HocCu { TenHocCu="Bút chì 4B", IdLoaiHocCu=1, DonViTinh="Cái", GiaBan=5000, SoLuong=100 },
+                new HocCu { TenHocCu="Màu nước 12 màu", IdLoaiHocCu=2, DonViTinh="Hộp", GiaBan=60000, SoLuong=50 },
+                new HocCu { TenHocCu="Màu Acrylic 24 màu", IdLoaiHocCu=3, DonViTinh="Hộp", GiaBan=150000, SoLuong=30 },
+                new HocCu { TenHocCu="Sơn dầu 12 màu", IdLoaiHocCu=4, DonViTinh="Hộp", GiaBan=200000, SoLuong=20 },
+                new HocCu { TenHocCu="Cọ vẽ size 6", IdLoaiHocCu=5, DonViTinh="Cái", GiaBan=30000, SoLuong=80 },
+                new HocCu { TenHocCu="Giấy vẽ A4", IdLoaiHocCu=6, DonViTinh="Tờ", GiaBan=2000, SoLuong=200 },
+                new HocCu { TenHocCu="Khung vẽ 30x40cm", IdLoaiHocCu=7, DonViTinh="Cái", GiaBan=50000, SoLuong=40 },
+                new HocCu { TenHocCu="Bảng màu gỗ", IdLoaiHocCu=8, DonViTinh="Cái", GiaBan=80000, SoLuong=25 }
+            };
+            dbContext.HocCus.AddRange(hocCus);
+            dbContext.SaveChanges();
+        }
+
         if (dbContext.Quyens.Any() == false)
         {
             var adminRole = new Quyen
@@ -158,6 +218,30 @@ try
             dbContext.Quyens.AddRange(adminRole, nhanVienKhoRole);
             dbContext.SaveChanges();
         }
+
+        if (dbContext.PhuHuynhs.Any() == false)
+        {
+            var user = new User
+            {
+                Mail = "khachvanglai",
+                MatKhau="khachvanglai",
+                IsHocVien= true
+            };
+            dbContext.Users.Add(user);
+            dbContext.SaveChanges();
+            var phuHuynh = new PhuHuynh
+            {
+                TenPh = "Khách Vãng Lai",
+                UserId = user.UserId,
+                Sdt = "0000000000",
+                GioiTinh= "Nam",
+                NgaySinh= DateOnly.FromDateTime( new DateTime(2000,1,1))
+                
+            };
+            dbContext.PhuHuynhs.Add(phuHuynh);
+            dbContext.SaveChanges();
+        }
+
         if (dbContext.NhanViens.Any() == false)
         {
             var user = new User
@@ -181,6 +265,7 @@ try
                 dbContext.NhanViens.Add(staff);
                 dbContext.SaveChanges();
             }
+            
         }
         if (!dbContext.ChuyenMons.Any())
         {

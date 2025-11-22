@@ -155,6 +155,8 @@ namespace server.contollers.Winform
                                 HocVienId = hocVienEntity.IdHocVien,
                                 IdLopHoc = lopId,
                                 Ngaytao = DateOnly.FromDateTime(DateTime.Now),
+                                TrangThai=true,
+                                IdKhoaHoc= lopHoc.IdKhoaHoc,
                                 TongTien = lopHoc.IdKhoaHocNavigation.HocPhi,
                                 GiamGia = (lopHoc.IdKhoaHocNavigation.HocPhi * db.CacKhoaHocKhuyenMais
                                 .Include(ckh => ckh.IdKhuyenMaiNavigation)
