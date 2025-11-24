@@ -15,15 +15,15 @@ namespace server.contollers.Winform.DTO
 
         public List<int>? GiaoVienId { get; set; }
 
-        public DateOnly? NgayKhaiGiang { get; set; }
+        public DateTime? NgayKhaiGiang { get; set; }
 
-        public int? SoLuongBuoi { get; set; }
+       
 
         public string? SoBuoiTrenTuan { get; set; }
 
         public int? SoLuongToiThieu { get; set; }
 
-        public string? TrangThai { get; set; }
+       
 
         public int? SoLuongToiDa { get; set; }
 

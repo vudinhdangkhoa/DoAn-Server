@@ -30,18 +30,76 @@ namespace server.contollers.Winform
             var chuyenMons = await db.ChuyenMons.Select(t => new
             {
                 t.IdChuyenMon,
-                t.TenChuyenMon
+                t.TenChuyenMon,
+                t.MoTa,
+                hinhAnh = t.HinhAnh != null ? $"/image/{t.HinhAnh}" : null
             }).ToListAsync();
 
             return Ok(chuyenMons);
         }
 
+        [HttpPost("CreateChuyenMon")]
+        public async Task<IActionResult> createChuyenMon([FromBody] AddChuyenMon chuyenMon)
+        {
+            ChuyenMon newChuyenMon = new ChuyenMon
+            {
+                TenChuyenMon = chuyenMon.tenChuyenMon,
+                MoTa = chuyenMon.moTa,
+                
+            };
+
+            //Xử lý hình ảnh
+            if (chuyenMon.hinhAnh != null)
+            {
+
+                var fileName = $"{Guid.NewGuid()}_{Path.GetExtension(chuyenMon.hinhAnh.FileName)}";
+                var filePath = Path.Combine("wwwroot/image", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await chuyenMon.hinhAnh.CopyToAsync(stream);
+                }
+                newChuyenMon.HinhAnh = fileName;
+
+            }
+    
+            db.ChuyenMons.Add(newChuyenMon);
+            await db.SaveChangesAsync();
+
+            return Ok(new { message = "Thêm chuyên môn thành công" });
+        }
+
+        [HttpPut("UpdateChuyenMon/{idChuyenMon}")]
+        public async Task<IActionResult> updateChuyenMon(int idChuyenMon, [FromBody] AddChuyenMon chuyenMon)
+        {
+            var existingChuyenMon = await db.ChuyenMons.FindAsync(idChuyenMon);
+            if (existingChuyenMon == null)
+            {
+                return NotFound(new { message = "Chuyên môn không tồn tại" });
+            }
+
+            existingChuyenMon.TenChuyenMon = chuyenMon.tenChuyenMon;
+            existingChuyenMon.MoTa = chuyenMon.moTa;
+            if (chuyenMon.hinhAnh != null)
+            {
+
+                existingChuyenMon.HinhAnh = Helper.HandleImage(chuyenMon.hinhAnh, "wwwroot/image").Result;
+
+            }
+
+            db.ChuyenMons.Update(existingChuyenMon);
+            await db.SaveChangesAsync();
+
+            return Ok(new { message = "Cập nhật chuyên môn thành công" });
+        }
+
         [HttpGet("GetAllKhoaHoc")]
         public async Task<IActionResult> GetAllKhoaHoc()
         {
-            var khoaHocs = await db.KhoaHocs.Include(t => t.LopHocs).Select(t => new
+            var khoaHocs = await db.KhoaHocs.Include(cm => cm.IdChuyenMonNavigation).Include(t => t.LopHocs).Select(t => new
             {
                 t.IdKhoaHoc,
+                t.IdChuyenMon,
                 t.TenKhoaHoc,
                 t.MoTa,
                 t.NgayTao,
@@ -56,6 +114,7 @@ namespace server.contollers.Winform
                     .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
                     .Max() ?? 0),
                 t.SoLuongBuoi,
+                hinhAnh = t.HinhAnh != null ? $"/image/imageKhoaHoc/{t.HinhAnh}" : null,
                 LopHocs = t.LopHocs // Lấy tất cả trước
             }).ToListAsync();
 
@@ -63,12 +122,14 @@ namespace server.contollers.Winform
             var result = khoaHocs.Select(t => new
             {
                 t.IdKhoaHoc,
+                t.IdChuyenMon,
                 t.TenKhoaHoc,
                 t.MoTa,
                 t.NgayTao,
                 t.HocPhi,
                 t.SoLuongBuoi,
                 t.giamGia,
+                t.hinhAnh,
                 lopHocs = t.LopHocs.Where(l =>
                     l.NgayKhaiGiang.HasValue &&
                     l.SoLuongBuoi.HasValue &&
@@ -86,6 +147,39 @@ namespace server.contollers.Winform
             return Ok(result);
         }
 
+        [HttpGet("GetKhoaHocById/{id}")]
+        public async Task<IActionResult> GetKhoaHocById(int id)
+        {
+            try
+            {
+                var khoaHoc = await db.KhoaHocs
+                    .Where(k => k.IdKhoaHoc == id)
+                    .Select(k => new
+                    {
+                        IdKhoaHoc = k.IdKhoaHoc,
+                        TenKhoaHoc = k.TenKhoaHoc,
+                        MoTa = k.MoTa,
+                        MucTieu = k.MucTieu,
+                        HocPhi = k.HocPhi,
+                        SoLuongBuoi = k.SoLuongBuoi,
+                        LoTrinh = k.LoTrinh,
+                        IdChuyenMon = k.IdChuyenMon, // Quan trọng để binding ComboBox
+                        hinhAnh = k.HinhAnh != null ? $"/image/imageKhoaHoc/{k.HinhAnh}" : null,
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (khoaHoc == null)
+                {
+                    return NotFound(new { message = "Không tìm thấy khóa học" });
+                }
+
+                return Ok(khoaHoc);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
 
         [HttpPost("CreateKhoaHoc")]
         public async Task<IActionResult> createKhoaHoc([FromForm] AddKhoaHoc khoaHoc)

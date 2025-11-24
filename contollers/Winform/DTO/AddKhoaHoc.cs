@@ -24,4 +24,13 @@ namespace server.contollers.Winform.DTO
         public string? LoTrinh { get; set; }
 
     }
+
+    public class AddChuyenMon
+    {
+        public string? tenChuyenMon { get; set; }
+        
+        public string? moTa { get; set; }
+        public IFormFile? hinhAnh { get; set; }
+
+    }
 }

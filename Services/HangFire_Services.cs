@@ -26,6 +26,8 @@ namespace server.Services
 
             // Tìm các lớp học cần cập nhật 
             var classesToUpdate = await _dbContext.LopHocs
+                .Include(hctl=>hctl.HocCuThuocLops)
+                    .ThenInclude(hc=>hc.IdHocCuNavigation)
                 .Include(lh => lh.LichHocs)
                 .Include(lh => lh.HoaDonKhoaHocs)
                     .ThenInclude(hd => hd.HocVien)
@@ -51,6 +53,17 @@ namespace server.Services
             {
                 // Cập nhật trạng thái lớp học
                 lopHoc.TrangThai = DungChung.trangThaiLopHoc_DaKetThuc;
+
+               foreach (var hctl in lopHoc.HocCuThuocLops)
+                {
+                   
+                    if (hctl.IdHocCuNavigation != null)
+                    {
+                        hctl.IdHocCuNavigation.SoLuong += hctl.SoLuong; // Trả lại số lượng học cụ về kho
+                    }
+                }
+                
+
                 _logger.LogInformation($"[Hangfire Job] Cập nhật lớp: {lopHoc.TenLopHoc} (ID: {lopHoc.IdLopHoc}) thành 'Đã kết thúc'.");
 
                 if (!lopHoc.HoaDonKhoaHocs.Any())

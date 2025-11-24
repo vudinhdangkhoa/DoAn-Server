@@ -23,14 +23,14 @@ namespace server.contollers.Winform
         public async Task<IActionResult> GetAllLopHoc()
         {
             // Lấy dữ liệu trước
-            var lopHocs = await db.LopHocs.Include(t=>t.GiaoVienDdayLops).ThenInclude(g=>g.IdGiaoVienNavigation).Select(t => new
+            var lopHocs = await db.LopHocs.Include(t => t.GiaoVienDdayLops).ThenInclude(g => g.IdGiaoVienNavigation).Select(t => new
             {
                 t.IdLopHoc,
                 t.IdKhoaHoc,
                 t.TenLopHoc,
                 t.NgayTao,
                 phong = t.IdPhongNavigation.TenPhong,
-                giaoVien = t.GiaoVienDdayLops.Select(g=> new { tenGV = g.IdGiaoVienNavigation.TenGv }).ToList(),
+                giaoVien = t.GiaoVienDdayLops.Select(g => new { tenGV = g.IdGiaoVienNavigation.TenGv }).ToList(),
                 t.SoLuongBuoi,
                 t.SoBuoiTrenTuan,
                 t.SoLuongHv,
@@ -73,22 +73,90 @@ namespace server.contollers.Winform
             return Ok(result);
         }
 
+        [HttpGet("GetAllPhongHoc")]
+        public async Task<IActionResult> GetAllPhongHoc()
+        {
+            var phongHocs = await db.PhongHocs.Select(t => new
+            {
+                t.IdPhong,
+                t.TenPhong,
+            }).ToListAsync();
+
+            return Ok(phongHocs);
+        }
+
+        [HttpGet("GetAllKhoaHoc")]
+        public async Task<IActionResult> GetAllKhoaHoc()
+        {
+            var khoaHocs = await db.KhoaHocs.Select(t => new
+            {
+                t.IdKhoaHoc,
+                t.TenKhoaHoc,
+            }).ToListAsync();
+
+            return Ok(khoaHocs);
+        }
+
+        [HttpGet("GetAllGiaoVien")]
+        public async Task<IActionResult> GetAllGiaoVien()
+        {
+            var giaoViens = await db.GiaoViens.Select(t => new
+            {
+                t.GiaoVienId,
+                t.TenGv,
+            }).ToListAsync();
+
+            return Ok(giaoViens);
+        }
+
+        [HttpGet("GetAllHocCu")]
+        public async Task<IActionResult> GetAllHocCu()
+        {
+            var hocCus = await db.HocCus.Select(t => new
+            {
+                t.IdHocCu,
+                t.TenHocCu,
+                t.GiaBan,
+                t.SoLuong,
+                t.DonViTinh,
+            }).ToListAsync();
+
+            return Ok(hocCus);
+        }
+
+        [HttpGet("GetAllChuyenMon")]
+        public async Task<IActionResult> GetAllChuyenMon()
+        {
+            var chuyenMons = await db.ChuyenMons.Select(t => new
+            {
+                t.IdChuyenMon,
+                t.TenChuyenMon,
+            }).ToListAsync();
+
+            return Ok(chuyenMons);
+        }
+
         [HttpGet("GetLopHocById/{idLophoc}")]
         public async Task<IActionResult> GetLopHocById(int idLophoc)
         {
             var lopHoc = await db.LopHocs
                 .Where(l => l.IdLopHoc == idLophoc)
                 .Include(t => t.IdPhongNavigation)
-                .Include(t => t.HocCuThuocLops)
-                .Include(t=>t.GiaoVienDdayLops).ThenInclude(g=>g.IdGiaoVienNavigation)
+                .Include(t => t.HocCuThuocLops).ThenInclude(h => h.IdHocCuNavigation)
+                .Include(t => t.GiaoVienDdayLops).ThenInclude(g => g.IdGiaoVienNavigation)
                 .Select(t => new
                 {
                     t.IdLopHoc,
                     t.IdKhoaHoc,
                     t.TenLopHoc,
                     t.NgayTao,
-                    phong = t.IdPhongNavigation.TenPhong,
-                    giaoVien = t.GiaoVienDdayLops.Select(g=>g.IdGiaoVienNavigation.TenGv).ToList(),
+                    IdPhong = t.IdPhongNavigation.IdPhong,
+                    giaoVien = t.GiaoVienDdayLops.Select(g => new
+                    {
+                        TenGv = g.IdGiaoVienNavigation.TenGv,
+                        GiaoVienId = g.IdGiaoVienNavigation.GiaoVienId
+                    }
+                    ).ToList(),
                     t.SoLuongBuoi,
                     t.SoBuoiTrenTuan,
                     t.SoLuongHv,
@@ -97,7 +165,7 @@ namespace server.contollers.Winform
                     t.ThoiGianBatDau,
                     t.ThoiGianKetThuc,
                     t.NgayKhaiGiang,
-                    hocCu = t.HocCuThuocLops,
+                    hocCu = t.HocCuThuocLops.Select(h => new { h.IdHocCuNavigation.IdHocCu, h.IdHocCuNavigation.TenHocCu, h.IdHocCuNavigation.GiaBan, h.SoLuong, h.IdHocCuNavigation.DonViTinh }).ToList(),
                     KhoaHoc = t.IdKhoaHocNavigation.TenKhoaHoc,
                     hocViens = t.HoaDonKhoaHocs.Select(hv => new
                     {
@@ -118,7 +186,7 @@ namespace server.contollers.Winform
             return Ok(lopHoc);
         }
 
-        [HttpGet("GetGiaoVienKhongTrunglich")]
+        [HttpPost("GetGiaoVienKhongTrunglich")]
         public async Task<IActionResult> GetGiaoVienKhongTrunglich([FromBody] AddLopHoc lophoc)
         {
 
@@ -126,33 +194,32 @@ namespace server.contollers.Winform
 
             return Ok(new
             {
-                tenGV=giaoVienKhongTrungLich.Select(gv=>gv.TenGv),
-                idGV=giaoVienKhongTrungLich.Select(gv=>gv.GiaoVienId)
+                tenGV = giaoVienKhongTrungLich.Select(gv => gv.TenGv),
+                idGV = giaoVienKhongTrungLich.Select(gv => gv.GiaoVienId)
             });
         }
 
         [HttpPost("CreateLopHoc")]
-        public async Task<IActionResult> CreateLopHoc([FromForm] AddLopHoc lopHoc)
+        public async Task<IActionResult> CreateLopHoc([FromBody] AddLopHoc lopHoc)
         {
-
+            var khoaHoc = await db.KhoaHocs.FirstOrDefaultAsync(k => k.IdKhoaHoc == lopHoc.IdKhoaHoc);
             LopHoc lh = new LopHoc
             {
                 TenLopHoc = lopHoc.TenLopHoc,
                 IdKhoaHoc = lopHoc.IdKhoaHoc,
                 IdPhong = lopHoc.IdPhong,
-               
-                NgayKhaiGiang = lopHoc.NgayKhaiGiang,
-                SoLuongBuoi = lopHoc.SoLuongBuoi,
+                NgayKhaiGiang = DateOnly.FromDateTime(lopHoc.NgayKhaiGiang.Value),
+                SoLuongBuoi = khoaHoc.SoLuongBuoi,
                 SoBuoiTrenTuan = lopHoc.SoBuoiTrenTuan,
                 SoLuongToiThieu = lopHoc.SoLuongToiThieu,
-                TrangThai = lopHoc.TrangThai,
+                TrangThai = DungChung.trangThaiLopHoc_DangMo,
                 SoLuongToiDa = lopHoc.SoLuongToiDa,
                 ThoiGianBatDau = lopHoc.ThoiGianBatDau,
                 ThoiGianKetThuc = lopHoc.ThoiGianKetThuc,
                 NgayTao = DateOnly.FromDateTime(DateTime.Now),
                 SoLuongHv = 0
             };
-            if(Helper.CheckTrungLichLopHoc(lh, db).Result == true)
+            if (Helper.CheckTrungLichLopHoc(lh, db).Result == true)
             {
                 return BadRequest(new { message = "Lịch học bị trùng với lớp học khác" });
             }
@@ -160,10 +227,10 @@ namespace server.contollers.Winform
             await db.SaveChangesAsync();
 
             //thêm giáo viên dạy lớp
-            if(lopHoc.GiaoVienId != null)
+            if (lopHoc.GiaoVienId != null)
             {
-                
-                foreach(var gvId in lopHoc.GiaoVienId)
+
+                foreach (var gvId in lopHoc.GiaoVienId)
                 {
                     GiaoVienDdayLop gvdl = new GiaoVienDdayLop
                     {
@@ -176,17 +243,42 @@ namespace server.contollers.Winform
             }
 
             // Thêm học cụ vào lớp học
-            if (lopHoc.DShocCu != null)
+            if (lopHoc.DShocCu != null && lopHoc.DShocCu.Any())
             {
+                var hocCuIds = lopHoc.DShocCu.Keys.ToList();
+
+                // ✅ Query tất cả học cụ cần dùng 1 lần duy nhất
+                var hocCus = await db.HocCus
+                    .Where(h => hocCuIds.Contains(h.IdHocCu))
+                    .ToListAsync();
+
+                // Kiểm tra tất cả học cụ tồn tại
+                var missingIds = hocCuIds.Except(hocCus.Select(h => h.IdHocCu)).ToList();
+                if (missingIds.Any())
+                {
+                    return BadRequest(new { message = $"Không tìm thấy học cụ với ID: {string.Join(", ", missingIds)}" });
+                }
+
                 foreach (var item in lopHoc.DShocCu)
                 {
-                    HocCuThuocLop hctl = new HocCuThuocLop
+                    var hocCu = hocCus.First(h => h.IdHocCu == item.Key);
+
+                    // Kiểm tra số lượng
+                    if (hocCu.SoLuong < item.Value)
+                    {
+                        return BadRequest(new { message = $"Không đủ số lượng học cụ: {hocCu.TenHocCu} (Còn: {hocCu.SoLuong}, Cần: {item.Value})" });
+                    }
+
+                    // Trừ số lượng từ kho
+                    hocCu.SoLuong -= item.Value;
+
+                    // Thêm quan hệ
+                    db.HocCuThuocLops.Add(new HocCuThuocLop
                     {
                         IdLopHoc = lh.IdLopHoc,
                         IdHocCu = item.Key,
                         SoLuong = item.Value
-                    };
-                    db.HocCuThuocLops.Add(hctl);
+                    });
                 }
             }
             await db.SaveChangesAsync();
@@ -196,7 +288,7 @@ namespace server.contollers.Winform
         }
 
         [HttpPut("UpdateLopHoc/{idLopHoc}")]
-        public async Task<IActionResult> UpdateLopHoc(int idLopHoc, [FromForm] AddLopHoc lopHoc)
+        public async Task<IActionResult> UpdateLopHoc(int idLopHoc, [FromBody] AddLopHoc lopHoc)
         {
             var existingLopHoc = await db.LopHocs.FindAsync(idLopHoc);
             if (existingLopHoc == null)
@@ -206,12 +298,12 @@ namespace server.contollers.Winform
 
             existingLopHoc.TenLopHoc = lopHoc.TenLopHoc;
             existingLopHoc.IdPhong = lopHoc.IdPhong;
-            
-            existingLopHoc.NgayKhaiGiang = lopHoc.NgayKhaiGiang;
-            existingLopHoc.SoLuongBuoi = lopHoc.SoLuongBuoi;
+
+            existingLopHoc.NgayKhaiGiang = DateOnly.FromDateTime(lopHoc.NgayKhaiGiang.Value);
+
             existingLopHoc.SoBuoiTrenTuan = lopHoc.SoBuoiTrenTuan;
             existingLopHoc.SoLuongToiThieu = lopHoc.SoLuongToiThieu;
-            existingLopHoc.TrangThai = lopHoc.TrangThai;
+
             existingLopHoc.SoLuongToiDa = lopHoc.SoLuongToiDa;
             existingLopHoc.ThoiGianBatDau = lopHoc.ThoiGianBatDau;
             existingLopHoc.ThoiGianKetThuc = lopHoc.ThoiGianKetThuc;
@@ -219,7 +311,7 @@ namespace server.contollers.Winform
             // Cập nhật giáo viên dạy lớp
             if (lopHoc.GiaoVienId != null)
             {
-                var existingGiaoVienDdayLops = db.GiaoVienDdayLops.Where(g => g.IdLopHoc == idLopHoc);
+                var existingGiaoVienDdayLops = await db.GiaoVienDdayLops.Where(g => g.IdLopHoc == idLopHoc).ToListAsync();
                 db.GiaoVienDdayLops.RemoveRange(existingGiaoVienDdayLops);
 
                 foreach (var gvId in lopHoc.GiaoVienId)
@@ -236,18 +328,73 @@ namespace server.contollers.Winform
             // Cập nhật học cụ
             if (lopHoc.DShocCu != null)
             {
-                var existingHocCuThuocLops = db.HocCuThuocLops.Where(h => h.IdLopHoc == idLopHoc);
-                db.HocCuThuocLops.RemoveRange(existingHocCuThuocLops);
+                // 1. Lấy danh sách học cụ cũ
+                var existingHocCuThuocLops = await db.HocCuThuocLops
+                    .Where(h => h.IdLopHoc == idLopHoc)
+                    .ToListAsync();
 
-                foreach (var item in lopHoc.DShocCu)
+                // 2. ✅ TRẢ HỌC CỤ CŨ VỀ KHO (Query 1 lần)
+                if (existingHocCuThuocLops.Any())
                 {
-                    HocCuThuocLop hctl = new HocCuThuocLop
+                    var oldHocCuIds = existingHocCuThuocLops.Select(h => h.IdHocCu).Distinct().ToList();
+
+                    // ✅ Query tất cả học cụ cũ 1 lần duy nhất
+                    var oldHocCus = await db.HocCus
+                        .Where(h => oldHocCuIds.Contains(h.IdHocCu))
+                        .ToListAsync();
+
+                    // Trả học cụ về kho
+                    foreach (var hctl in existingHocCuThuocLops)
                     {
-                        IdLopHoc = idLopHoc,
-                        IdHocCu = item.Key,
-                        SoLuong = item.Value
-                    };
-                    db.HocCuThuocLops.Add(hctl);
+                        var hocCu = oldHocCus.FirstOrDefault(h => h.IdHocCu == hctl.IdHocCu);
+                        if (hocCu != null)
+                        {
+                            hocCu.SoLuong += hctl.SoLuong; // ✅ Đã được track, sẽ lưu
+                        }
+                    }
+
+                    // Xóa quan hệ cũ
+                    db.HocCuThuocLops.RemoveRange(existingHocCuThuocLops);
+                }
+
+                // 3. ✅ THÊM HỌC CỤ MỚI (Query 1 lần)
+                if (lopHoc.DShocCu.Any())
+                {
+                    var newHocCuIds = lopHoc.DShocCu.Keys.ToList();
+
+                    // ✅ Query tất cả học cụ mới 1 lần duy nhất
+                    var newHocCus = await db.HocCus
+                        .Where(h => newHocCuIds.Contains(h.IdHocCu))
+                        .ToListAsync();
+
+                    // Kiểm tra tất cả học cụ tồn tại
+                    var missingIds = newHocCuIds.Except(newHocCus.Select(h => h.IdHocCu)).ToList();
+                    if (missingIds.Any())
+                    {
+                        return BadRequest(new { message = $"Không tìm thấy học cụ với ID: {string.Join(", ", missingIds)}" });
+                    }
+
+                    foreach (var item in lopHoc.DShocCu)
+                    {
+                        var hocCu = newHocCus.First(h => h.IdHocCu == item.Key);
+
+                        // Kiểm tra số lượng
+                        if (hocCu.SoLuong < item.Value)
+                        {
+                            return BadRequest(new { message = $"Không đủ số lượng học cụ: {hocCu.TenHocCu} (Còn: {hocCu.SoLuong}, Cần: {item.Value})" });
+                        }
+
+                        // Trừ số lượng từ kho
+                        hocCu.SoLuong -= item.Value; // ✅ Đã được track, sẽ lưu
+
+                        // Thêm quan hệ mới
+                        db.HocCuThuocLops.Add(new HocCuThuocLop
+                        {
+                            IdLopHoc = idLopHoc,
+                            IdHocCu = item.Key,
+                            SoLuong = item.Value
+                        });
+                    }
                 }
             }
 

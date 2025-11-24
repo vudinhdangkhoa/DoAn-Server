@@ -63,7 +63,8 @@ namespace server.contollers.Winform
 
                 newTeacher.Avatar = fileName;
             }
-
+            db.GiaoViens.Add(newTeacher);
+            await db.SaveChangesAsync();
             return Ok(new { message = "Thêm giáo viên thành công" });
         }
 
