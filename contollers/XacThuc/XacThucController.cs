@@ -47,7 +47,8 @@ namespace server.contollers.XacThuc
             }
             if (user.IsHocVien == false)
             {
-                return Ok(new { message = "Đăng nhập thành công", status = "staff", UserId = user.UserId });
+                var staff = await db.NhanViens.Include(nv=>nv.IdQuyenNavigation).FirstOrDefaultAsync(t => t.UserId == user.UserId);
+                return Ok(new { message = "Đăng nhập thành công", status = "staff", UserId = user.UserId,staff.TenNv,role= staff.IdQuyenNavigation.TenQuyen });
             }
             var token = _jwtService.GenerateToken(user);
             var refreshToken = _jwtService.GenerateRefreshToken();

@@ -20,6 +20,7 @@ namespace server
     {
         static public string adminRole = "Admin";
         static public string nhanVienKhoRole = "Nhân Viên Kho";
+        static public string nhanVienHocVuRole = "Nhân Viên Học Vụ";
         static public string trangThaiLopHoc_DangMo = "đang mở";
         static public string trangThaiLopHoc_TamNgung = "tạm ngừng";
         static public string trangThaiLopHoc_DaKetThuc = "kết thúc";

@@ -215,7 +215,11 @@ try
             {
                 TenQuyen = DungChung.nhanVienKhoRole
             };
-            dbContext.Quyens.AddRange(adminRole, nhanVienKhoRole);
+            var nhanVienHocVuRole = new Quyen
+            {
+                TenQuyen = DungChung.nhanVienHocVuRole
+            };
+            dbContext.Quyens.AddRange(adminRole, nhanVienKhoRole, nhanVienHocVuRole);
             dbContext.SaveChanges();
         }
 
@@ -265,7 +269,45 @@ try
                 dbContext.NhanViens.Add(staff);
                 dbContext.SaveChanges();
             }
-            
+
+            var userHocVu = new User
+            {
+                Mail = "hocvu@example.com",
+                MatKhau = "HocVu@123", IsHocVien = false
+            };
+
+            dbContext.Users.Add(userHocVu);
+            dbContext.SaveChanges();
+            var hocVuQuyen = dbContext.Quyens.FirstOrDefault(q => q.TenQuyen == DungChung.nhanVienHocVuRole);
+            if (hocVuQuyen != null)
+            {
+                var staff = new NhanVien
+                {
+                    TenNv = "Nguyễn Văn A",
+                    UserId = userHocVu.UserId,
+                    IdQuyen = hocVuQuyen.IdQuyen
+                };
+                dbContext.NhanViens.Add(staff); dbContext.SaveChanges();
+            }
+
+            var userKho = new User
+            {
+                Mail = "kho@example.com", MatKhau = "Kho@123",
+                IsHocVien = false
+            };
+            dbContext.Users.Add(userKho);
+            dbContext.SaveChanges();
+            var khoQuyen = dbContext.Quyens.FirstOrDefault(q => q.TenQuyen == DungChung.nhanVienKhoRole);
+            if (khoQuyen != null)
+            {
+                var staff = new NhanVien
+                {
+                    TenNv = "Nguyễn Thị B",
+                    UserId = userKho.UserId,
+                    IdQuyen = khoQuyen.IdQuyen
+                };                dbContext.NhanViens.Add(staff);
+                dbContext.SaveChanges();
+            }
         }
         if (!dbContext.ChuyenMons.Any())
         {
