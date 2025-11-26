@@ -49,7 +49,8 @@ namespace server.contollers.LichHoc
                                 lichhoc.IdLichHoc,
                                 lichhoc.NgayHoc,
                                 lichhoc.IdPhongNavigation.TenPhong,
-                                lichhoc.IdPhong
+                                lichhoc.IdPhong,
+                                lichhoc.TrangThai,
 
                             }
                         )
