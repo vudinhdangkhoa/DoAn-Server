@@ -34,7 +34,7 @@ namespace server.contollers.LichSuThanhToan
                         {
                             hv.IdHocVien,
                             hv.TenHv,
-                            avatar = hv.Avartar.StartsWith("http") ? hv.Avartar : $"/image/imageHocVien/{hv.Avartar}",
+                            avatar = hv.Avartar !=null ?hv.Avartar.StartsWith("http") ? hv.Avartar : $"/image/imageHocVien/{hv.Avartar}" : null,
                             hoaDonKhoaHoc = db.HoaDonKhoaHocs.Where(hd => hd.HocVienId == hv.IdHocVien && hd.TrangThai == true).Select(
                                 hd => new
                                 {

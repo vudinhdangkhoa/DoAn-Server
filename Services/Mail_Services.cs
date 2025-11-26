@@ -9,6 +9,8 @@ namespace server.Services
 {
     public class Mail_Services
     {
+        public string mail= "khoavaden@gmail.com";
+        public string pass= "rufv cfqw wsay weim";
 
         private static readonly Dictionary<string, (string otp, DateTime expiry)> _otpStorage = new();
 
@@ -48,8 +50,8 @@ namespace server.Services
 
         public void SendEmail(string toEmail, string otp)
         {
-            string fromEmail = "khoavaden@gmail.com";
-            string fromPassword = "rufv cfqw wsay weim";
+            string fromEmail = mail;
+            string fromPassword = pass;
 
             try
             {
@@ -79,8 +81,8 @@ namespace server.Services
         public async Task SendEmailToUser(string toEmail, string subject, string body, byte[]? hoaDonPDF = null)
         {
 
-            string fromEmail = "khoavaden@gmail.com";
-            string fromPassword = "rufv cfqw wsay weim";
+            string fromEmail = mail;
+            string fromPassword = pass;
 
             try
             {

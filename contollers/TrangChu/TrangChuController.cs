@@ -234,5 +234,32 @@ namespace server.contollers.TrangChu
             return Ok(new { message = "Đăng ký lớp học thành công" });
         }
 
+        [HttpGet("TimKiemKhoaHoc")]
+        public async Task<IActionResult> TimKiemKhoaHoc([FromQuery]string searchTerm)
+        {
+            var khoaHocs = await db.KhoaHocs.Include(k=> k.IdChuyenMonNavigation)
+                .Where(kh => kh.TenKhoaHoc.Contains(searchTerm)|| kh.IdChuyenMonNavigation.TenChuyenMon.Contains(searchTerm))
+                .Select(kh => new
+                {
+                    id = kh.IdKhoaHoc,
+                    tenKH = kh.TenKhoaHoc,
+                    hocPhi = kh.HocPhi,
+                    giamGia = (kh.HocPhi * db.CacKhoaHocKhuyenMais
+                        .Include(ckh => ckh.IdKhuyenMaiNavigation)
+                        .Where(ckh => ckh.IdKhoaHoc == kh.IdKhoaHoc
+                            && ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now)
+                            && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)
+                            && ckh.SoLuong > 0
+                            && ckh.IdKhuyenMaiNavigation != null)
+                        .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
+                        .Max() ?? 0),
+                    thoiGianHoc = kh.SoLuongBuoi,
+                    moTa = kh.MoTa,
+                    mucTieu = kh.MucTieu,
+                    hinhAnh = $"/image/imageKhoaHoc/" + kh.HinhAnh,
+                }).ToListAsync();
+
+            return Ok(khoaHocs);
+        }
     }
 }
