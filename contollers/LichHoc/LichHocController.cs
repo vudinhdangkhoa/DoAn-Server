@@ -42,6 +42,8 @@ namespace server.contollers.LichHoc
                         hd.IdLopHocNavigation.IdLopHoc,
                         hd.IdLopHocNavigation.ThoiGianBatDau,
                         hd.IdLopHocNavigation.ThoiGianKetThuc,
+                        ngayKhaiGiang=hd.IdLopHocNavigation.NgayKhaiGiang,
+                        ngayKetThuc=db.LichHocs.Where(t=>t.IdLopHoc == hd.IdLopHocNavigation.IdLopHoc).Select(hd=>hd.NgayHoc).Max(),
                         lichHoc = db.LichHocs.Include(lh => lh.IdPhongNavigation).Where(lh => lh.IdLopHoc == hd.IdLopHocNavigation.IdLopHoc)
                         .Select(
                             lichhoc => new

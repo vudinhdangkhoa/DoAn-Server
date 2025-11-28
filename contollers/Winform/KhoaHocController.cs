@@ -39,13 +39,15 @@ namespace server.contollers.Winform
         }
 
         [HttpPost("CreateChuyenMon")]
-        public async Task<IActionResult> createChuyenMon([FromBody] AddChuyenMon chuyenMon)
+        public async Task<IActionResult> createChuyenMon([FromForm] AddChuyenMon chuyenMon)
         {
+
+
             ChuyenMon newChuyenMon = new ChuyenMon
             {
                 TenChuyenMon = chuyenMon.tenChuyenMon,
                 MoTa = chuyenMon.moTa,
-                
+
             };
 
             //Xử lý hình ảnh
@@ -62,7 +64,7 @@ namespace server.contollers.Winform
                 newChuyenMon.HinhAnh = fileName;
 
             }
-    
+
             db.ChuyenMons.Add(newChuyenMon);
             await db.SaveChangesAsync();
 
@@ -70,7 +72,7 @@ namespace server.contollers.Winform
         }
 
         [HttpPut("UpdateChuyenMon/{idChuyenMon}")]
-        public async Task<IActionResult> updateChuyenMon(int idChuyenMon, [FromBody] AddChuyenMon chuyenMon)
+        public async Task<IActionResult> updateChuyenMon(int idChuyenMon, [FromForm] AddChuyenMon chuyenMon)
         {
             var existingChuyenMon = await db.ChuyenMons.FindAsync(idChuyenMon);
             if (existingChuyenMon == null)
@@ -185,6 +187,11 @@ namespace server.contollers.Winform
         public async Task<IActionResult> createKhoaHoc([FromForm] AddKhoaHoc khoaHoc)
         {
 
+            var check = await db.KhoaHocs.FirstOrDefaultAsync(t => t.TenKhoaHoc.Trim().ToLower() == khoaHoc.TenKhoaHoc.Trim().ToLower());
+            if (check != null)
+            {
+                return BadRequest(new { message = "Tên khóa học đã tồn tại" });
+            }
             KhoaHoc newKhoaHoc = new KhoaHoc
             {
                 IdChuyenMon = khoaHoc.IdChuyenMon,
@@ -227,13 +234,17 @@ namespace server.contollers.Winform
             {
                 return NotFound(new { message = "Khóa học không tồn tại" });
             }
-
+            var trungTen = await db.KhoaHocs.FirstOrDefaultAsync(t => t.TenKhoaHoc.Trim().ToLower() == khoaHoc.TenKhoaHoc.Trim().ToLower() && t.IdKhoaHoc != idKhoaHoc);
+            if (trungTen != null)
+            {
+                return BadRequest(new { message = "Tên khóa học đã tồn tại" });
+            }
             existingKhoaHoc.MoTa = khoaHoc.MoTa;
             existingKhoaHoc.MucTieu = khoaHoc.MucTieu;
             existingKhoaHoc.HocPhi = khoaHoc.HocPhi;
             existingKhoaHoc.SoLuongBuoi = khoaHoc.SoLuongBuoi;
             existingKhoaHoc.TenKhoaHoc = khoaHoc.TenKhoaHoc;
-            
+
             if (khoaHoc.HinhAnh != null)
             {
 
@@ -247,8 +258,23 @@ namespace server.contollers.Winform
             return Ok(new { message = "Cập nhật khóa học thành công" });
         }
 
+        [HttpGet("GetNextKhoaHocId")]
+        public async Task<IActionResult> GetNextKhoaHocId()
+        {
+            try
+            {
+                var maxId = await db.KhoaHocs.MaxAsync(k => (int?)k.IdKhoaHoc) ?? 0;
+                var nextId = maxId + 1;
+                return Ok(new { nextId = nextId });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 
-    
-   
+
+
 }
