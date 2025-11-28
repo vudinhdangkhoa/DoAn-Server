@@ -31,6 +31,7 @@ namespace server.contollers.Winform
                     lopHocs= k.LopHocs.Where(tt=>tt.TrangThai==DungChung.trangThaiLopHoc_DangMo).Select(l=> new {
                         idLopHoc= l.IdLopHoc,
                         tenLopHoc= l.TenLopHoc,
+                        ngayKhaiGiang=l.NgayKhaiGiang,
                         giaoVien = db.GiaoVienDdayLops.Where(g => g.IdLopHoc == l.IdLopHoc).Include(gv => gv.IdGiaoVienNavigation).Select(gv => new
                         {
                             idGiaoVien = gv.IdGiaoVienNavigation.GiaoVienId,

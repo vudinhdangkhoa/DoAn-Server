@@ -57,7 +57,7 @@ namespace server.contollers.Winform
                 t.NgaySinh,
                 t.phuHuynh,
                 t.GioiTinh,
-               
+                t.IdHocVien,
                 hoaDonKhoaHocs = t.hoaDonKhoaHocs.Where(w =>
                     Helper.checkKhoaHocDate(w.lopHoc.NgayKhaiGiang.Value, w.lopHoc.SoBuoiTrenTuan, w.lopHoc.SoLuongBuoi.Value)
                 ).ToList()
