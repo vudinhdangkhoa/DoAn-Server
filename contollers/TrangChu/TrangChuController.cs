@@ -46,7 +46,7 @@ namespace server.contollers.TrangChu
                 thongTinHocVien.NgaySinh,
                 thongTinHocVien.Sdt,
 
-                avatar = string.IsNullOrEmpty(thongTinHocVien.Avatar) 
+                avatar = string.IsNullOrEmpty(thongTinHocVien.Avatar)
                 ? null
                 : (thongTinHocVien.Avatar.StartsWith("http") ? thongTinHocVien.Avatar : $"/image/imagePhuhuynh/{thongTinHocVien.Avatar}")
             };
@@ -140,7 +140,7 @@ namespace server.contollers.TrangChu
         [HttpGet("GetDetailKhoaHoc/{idKhoaHoc}")]
         public async Task<IActionResult> GetDetailKhoaHoc(int idKhoaHoc)
         {
-            var khoaHoc = await db.KhoaHocs.Include(kh => kh.IdChuyenMonNavigation).FirstOrDefaultAsync(kh => kh.IdKhoaHoc == idKhoaHoc);
+            var khoaHoc = await db.KhoaHocs.Include(kh => kh.IdChuyenMonNavigation).Include(kh => kh.LopHocs).ThenInclude(lh => lh.PhanHois).ThenInclude(hv=>hv.IdHocVienNavigation).FirstOrDefaultAsync(kh => kh.IdKhoaHoc == idKhoaHoc);
 
             if (khoaHoc == null)
             {
@@ -170,7 +170,15 @@ namespace server.contollers.TrangChu
                 {
                     khoaHoc.IdChuyenMonNavigation.IdChuyenMon,
                     khoaHoc.IdChuyenMonNavigation.TenChuyenMon,
-                }
+                },
+                phanHoi = khoaHoc.LopHocs.SelectMany(ph=>ph.PhanHois).Select(ph=>new
+                {
+                    ph.IdPhanHoi,
+                    ph.NoiDung,
+                    ph.SoSao,
+                    tenHocVien= ph.IdHocVienNavigation.TenHv,
+                    avatar= string.IsNullOrEmpty( ph.IdHocVienNavigation.Avartar) ? null : ( ph.IdHocVienNavigation.Avartar.StartsWith("http") ?  ph.IdHocVienNavigation.Avartar : $"/image/imageHocVien/{ ph.IdHocVienNavigation.Avartar}"),
+                }).ToList(),
             };
 
             return Ok(result);
@@ -235,10 +243,10 @@ namespace server.contollers.TrangChu
         }
 
         [HttpGet("TimKiemKhoaHoc")]
-        public async Task<IActionResult> TimKiemKhoaHoc([FromQuery]string searchTerm)
+        public async Task<IActionResult> TimKiemKhoaHoc([FromQuery] string searchTerm)
         {
-            var khoaHocs = await db.KhoaHocs.Include(k=> k.IdChuyenMonNavigation)
-                .Where(kh => kh.TenKhoaHoc.Contains(searchTerm)|| kh.IdChuyenMonNavigation.TenChuyenMon.Contains(searchTerm))
+            var khoaHocs = await db.KhoaHocs.Include(k => k.IdChuyenMonNavigation)
+                .Where(kh => kh.TenKhoaHoc.Contains(searchTerm) || kh.IdChuyenMonNavigation.TenChuyenMon.Contains(searchTerm))
                 .Select(kh => new
                 {
                     id = kh.IdKhoaHoc,

@@ -20,10 +20,15 @@ namespace server.contollers.Feedback
             myDbContext = context;
         }
 
-        [HttpGet("GetDetailKhoaHocFeedback/{idLopHoc}")]
-        public IActionResult GetDetailKhoaHocFeedback(int idLopHoc)
+        [HttpGet("GetDetailKhoaHocFeedback/{idLopHoc}/{idHocVien}")]
+        public IActionResult GetDetailKhoaHocFeedback(int idLopHoc,int idHocVien)
         {
-            
+            var checkDaPhanHoi = myDbContext.PhanHois
+                .FirstOrDefault(ph => ph.IdHocVien == idHocVien && ph.IdLopHoc == idLopHoc);
+            if (checkDaPhanHoi != null)
+            {
+                return BadRequest(new { message = "bạn đã phản hồi khóa học này." });
+            }
             var result= myDbContext.LopHocs.Include(t=>t.IdKhoaHocNavigation)
             .Include(t=>t.GiaoVienDdayLops).ThenInclude(g=>g.IdGiaoVienNavigation)
                 .Where(l=>l.IdLopHoc==idLopHoc)

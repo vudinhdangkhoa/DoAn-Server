@@ -176,11 +176,12 @@ namespace server.contollers.Winform
             try
             {
                 // 1. Tổng quan
-                var tongHV = await _db.LopHocs.SumAsync(l => l.SoLuongHv ?? 0);
+                var tongHV = await _db.LopHocs.Where(lh=>lh.TrangThai==DungChung.trangThaiLopHoc_DangMo).SumAsync(l => l.SoLuongHv ?? 0);
                 var tongLop = await _db.LopHocs.CountAsync(l => l.TrangThai == DungChung.trangThaiLopHoc_DangMo);
 
                 // 2. Phân bố học viên theo Khóa
                 var phanBo = await _db.LopHocs
+                    .Where(l => l.TrangThai == DungChung.trangThaiLopHoc_DangMo)
                     .Include(l => l.IdKhoaHocNavigation)
                     .GroupBy(l => l.IdKhoaHocNavigation.TenKhoaHoc)
                     .Select(g => new HocVienTheoKhoaDTO
