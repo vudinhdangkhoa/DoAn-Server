@@ -291,7 +291,8 @@ try
                 {
                     TenNv = "Nguyễn Văn A",
                     UserId = userHocVu.UserId,
-                    IdQuyen = hocVuQuyen.IdQuyen
+                    IdQuyen = hocVuQuyen.IdQuyen,
+                    
                 };
                 dbContext.NhanViens.Add(staff); dbContext.SaveChanges();
             }

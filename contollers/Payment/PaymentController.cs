@@ -229,13 +229,16 @@ namespace server.contollers.Payment
                 return BadRequest(new { message = "Mã hóa đơn không hợp lệ." });
             }
              string orderId = "";
+             int tongtien=0;
             if (request.ContainsKey("vnp_TxnRef"))
             {
                 orderId = request["vnp_TxnRef"];
+                tongtien=request["vnp_Amount"]!=null? int.Parse( request["vnp_Amount"]):0;
             }
             else
             {
                 orderId = request["orderId"];
+                tongtien=request["amount"]!=null? int.Parse( request["amount"]):0;
             }
            
             var idParts = orderId.Split('_');
@@ -272,7 +275,7 @@ namespace server.contollers.Payment
                 .Include(hd => hd.IdLopHocNavigation)
                 .Include(hd => hd.IdKhoaHocNavigation)
                 .FirstOrDefaultAsync(hd => hd.IdHoaDon == hoaDonId);
-
+            
             if (hoaDon == null)
             {
                 return NotFound(new { message = "Không tìm thấy hóa đơn." });
@@ -291,7 +294,7 @@ namespace server.contollers.Payment
                     // Dùng dữ liệu đã nạp, không query lại CSDL
                     tenKhoaHoc = hoaDon.IdKhoaHocNavigation?.TenKhoaHoc,
                     tenLopHoc = hoaDon.IdLopHocNavigation?.TenLopHoc,
-                    hoaDon.TongTien
+                    tongTien=tongtien
                 }
             };
 
@@ -340,7 +343,16 @@ namespace server.contollers.Payment
                 {
                     lopHoc.SoLuongHv += 1;
                 }
-
+                var capNhatKhuyenMai = await _context.CacKhoaHocKhuyenMais
+                    .Where(ckh => ckh.IdKhoaHoc == hoaDon.IdKhoaHoc
+                        && ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.SoLuong > 0)
+                    .FirstOrDefaultAsync();
+                    if (capNhatKhuyenMai != null)
+                    {
+                        capNhatKhuyenMai.SoLuong -= 1;
+                    }
                 // 3. Lưu tất cả thay đổi vào CSDL
                 // Không cần gọi .Update() vì EF Core 8 đang theo dõi (track) các đối tượng này
                 await _context.SaveChangesAsync();

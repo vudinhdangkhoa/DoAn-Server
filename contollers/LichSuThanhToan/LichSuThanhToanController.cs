@@ -40,7 +40,7 @@ namespace server.contollers.LichSuThanhToan
                                 {
                                     hd.IdHoaDon,
                                     hd.Ngaytao,
-                                    hd.TongTien,
+                                    tongTien=hd.TongTien-(hd.GiamGia != null ? hd.GiamGia : 0),
 
                                     lopHoc = db.LopHocs.Where(lh => lh.IdLopHoc == hd.IdLopHoc).Select(
                                         lh => new

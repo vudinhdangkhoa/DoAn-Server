@@ -168,6 +168,14 @@ namespace server.contollers.Winform
                                 .Select(ckh => (double?)(ckh.IdKhuyenMaiNavigation.PhanTramKhuyenMai))
                                 .Max() ?? 0)
                             };
+                            var capNhatKhuyenMai=await db.CacKhoaHocKhuyenMais.FirstOrDefaultAsync(ckhkm=>ckhkm.IdKhoaHoc== lopHoc.IdKhoaHoc
+                            && ckhkm.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now)
+                            && ckhkm.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now) && ckhkm.SoLuong > 0);
+                            if(capNhatKhuyenMai != null)
+                            {
+                                capNhatKhuyenMai.SoLuong -= 1;
+                                await db.SaveChangesAsync();
+                            }
                             lopHoc.SoLuongHv += 1;
                             db.HoaDonKhoaHocs.Add(hoaDon);
                         }

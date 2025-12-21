@@ -220,7 +220,7 @@ namespace server.contollers.Winform
         }
 
         [HttpPost("BanHoaCu")]
-        public IActionResult BanHoaCu([FromBody] BanHoaCu banHoaCu)
+        public async Task<IActionResult> BanHoaCu([FromBody] BanHoaCu banHoaCu)
         {
             try
             {
@@ -234,6 +234,20 @@ namespace server.contollers.Winform
                     IdKhachHang= phuHuynh.UserId,
                     
                 };
+                var capNhatKhuyenMai = db.CacHocCuKhuyenMais
+                    .Where(ckh => banHoaCu.dsHoaCu.Any(item => item.ContainsKey(ckh.IdHocCu.Value))
+                        && ckh.NgayBatDau <= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.NgayKetThuc >= DateOnly.FromDateTime(DateTime.Now)
+                        && ckh.SoLuong > 0)
+                    .ToList();
+                    if (capNhatKhuyenMai != null)
+                    {
+                        foreach (var khuyenMai in capNhatKhuyenMai)
+                        {
+                            khuyenMai.SoLuong -= 1;
+                        }
+                        await db.SaveChangesAsync();
+                    }
                 db.HoaDonHocCus.Add(hoaDon);
                 db.SaveChanges();
 
@@ -258,6 +272,62 @@ namespace server.contollers.Winform
                 }
                 db.SaveChanges();
                 return Ok("Bán học cụ thành công");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetAllPhieuNhapHang")]
+        public async Task<IActionResult> GetHoaDonNhapHang()
+        {
+            try
+            {
+                var phieuNhaps = db.PhieuNhapHangs.Include(pn => pn.IdNhaCungCapNavigation).Include(pn => pn.User).Select(pn => new
+                {
+                    pn.IdPhieuNhapHang,
+                    pn.NgayTao,
+                    pn.TongTien,
+                    tenNhaCungCap = pn.IdNhaCungCapNavigation.TenNhaCungCap,
+                    tenNhanVien = pn.User.TenNv,
+                    chiTietPhieuNhaps = db.ChiTietPhieuNhaps.Where(ct => ct.IdPhieuNhapHang == pn.IdPhieuNhapHang).Select(ct => new
+                    {
+                        ct.IdHocCu,
+                        tenHocCu = ct.IdHocCuNavigation.TenHocCu,
+                        ct.SoLuong,
+                        ct.Gia
+                    }).ToList()
+                }).ToList();
+                return Ok(phieuNhaps);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetAllHoaDonHocCu")]
+        public async Task<IActionResult> GetAllHoaDonHocCu()
+        {
+            try
+            {
+                var hoaDons = db.HoaDonHocCus.Include(hd => hd.IdNhanVienNavigation).Include(hd => hd.IdKhachHangNavigation).Select(hd => new
+                {
+                    hd.IdHoaDonHocCu,
+                    hd.Ngaytao,
+                    hd.TongTien,
+                    hd.GiamGia,
+                    tenNhanVien = hd.IdNhanVienNavigation.TenNv,
+                    tenKhachHang = hd.IdKhachHangNavigation.TenPh,
+                    chiTietHoaDons = db.ChiTietHoaDonHocCus.Where(ct => ct.IdHoaDonHocCu == hd.IdHoaDonHocCu).Select(ct => new
+                    {
+                        ct.IdHocCu,
+                        tenHocCu = ct.IdHocCuNavigation.TenHocCu,
+                        ct.SoLuong,
+                    }).ToList()
+                }).ToList();
+                return Ok(hoaDons);
             }
             catch (Exception ex)
             {
